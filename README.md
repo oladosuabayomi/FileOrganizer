@@ -39,7 +39,7 @@ Users often face challenges with disorganized folders containing mixed file type
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/FileOrganizer.git
+   git clone https://github.com/oladosuabayomi/FileOrganizer.git
    cd FileOrganizer
    ```
 
@@ -53,9 +53,12 @@ Users often face challenges with disorganized folders containing mixed file type
    chmod +x run.sh
    ./run.sh
 
-   # Manual compilation
-   g++ -std=c++17 -O2 -o build/FileOrganizerWithUndo.exe src/main_simple_cli_with_undo.cpp
+   # Manual compilation (recommended - static linking to avoid linker issues)
+   mkdir build
+   g++ -std=c++17 -static -o build/FileOrganizerWithUndo.exe src/main_simple_cli_with_undo.cpp
    ```
+
+   **Note**: If you encounter linker errors, use the static linking option (`-static` flag) which resolves dynamic library dependencies.
 
 ### Usage
 
@@ -63,10 +66,10 @@ Users often face challenges with disorganized folders containing mixed file type
 # Show help
 ./build/FileOrganizerWithUndo.exe --help
 
-# Interactive mode
+# Interactive mode (recommended for beginners)
 ./build/FileOrganizerWithUndo.exe --interactive
 
-# List files and their categories
+# List files and their categories (preview mode)
 ./build/FileOrganizerWithUndo.exe --list "C:\path\to\folder"
 
 # Organize files
@@ -75,9 +78,19 @@ Users often face challenges with disorganized folders containing mixed file type
 # Undo last organization
 ./build/FileOrganizerWithUndo.exe --undo "C:\path\to\folder"
 
+# Undo specific session
+./build/FileOrganizerWithUndo.exe --undo "C:\path\to\folder" 20250711_143022
+
 # Show organization history
 ./build/FileOrganizerWithUndo.exe --history "C:\path\to\folder"
 ```
+
+**Windows Users**: Use `build\FileOrganizerWithUndo.exe` instead of `./build/FileOrganizerWithUndo.exe`
+
+**Cross-Platform Path Examples**:
+
+- Windows: `"C:\Users\YourName\Downloads"`
+- Linux/Mac: `"/home/username/Downloads"` or `"~/Downloads"`
 
 ## Project Structure
 
@@ -120,6 +133,44 @@ The advanced CLI version includes comprehensive undo functionality:
 - **Error handling**: Robust error handling for edge cases
 - **Progress tracking**: Real-time progress updates during organization
 - **Dry-run mode**: Preview mode for listing files before organizing
+
+## Troubleshooting
+
+### Common Issues
+
+#### "No such file or directory" Error
+
+```bash
+bash: ./build/FileOrganizerWithUndo.exe: No such file or directory
+```
+
+**Solution**: The executable hasn't been built yet. Run the build command first:
+
+```bash
+# Windows
+build.bat
+
+# Linux/Mac
+./run.sh
+
+# Or manual build
+mkdir build
+g++ -std=c++17 -static -o build/FileOrganizerWithUndo.exe src/main_simple_cli_with_undo.cpp
+```
+
+#### Linker Errors (ld returned 116 exit status)
+
+**Solution**: Use static linking:
+
+```bash
+g++ -std=c++17 -static -o build/FileOrganizerWithUndo.exe src/main_simple_cli_with_undo.cpp
+```
+
+#### Path Issues on Windows
+
+- Use double quotes around paths with spaces: `"C:\Users\Your Name\Downloads"`
+- Use backslashes for Windows paths: `"C:\path\to\folder"`
+- For bash on Windows, use forward slashes: `"C:/path/to/folder"`
 
 ## Contributing
 

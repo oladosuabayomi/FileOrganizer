@@ -380,7 +380,7 @@ SimpleFileOrganizer (Main Application)
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/FileOrganizer.git
+   git clone https://github.com/oladosuabayomi/FileOrganizer.git
    cd FileOrganizer
    ```
 
@@ -398,6 +398,18 @@ SimpleFileOrganizer (Main Application)
    chmod +x run.sh
    ./run.sh
    ```
+
+   **Manual Build (Recommended):**
+
+   ```bash
+   # Create build directory
+   mkdir build
+
+   # Compile with static linking (resolves linker issues)
+   g++ -std=c++17 -static -o build/FileOrganizerWithUndo.exe src/main_simple_cli_with_undo.cpp
+   ```
+
+   **Note**: Static linking (`-static` flag) is recommended to avoid dynamic library dependency issues during runtime.
 
 ### Usage Modes
 
