@@ -1,0 +1,57 @@
+# Build directories
+build/
+**/build/
+
+# Qt specific
+*.user
+*.pro.user
+*.pro.user.*
+*_qmlcache.qrc
+*.moc
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
+*.rcc
+*.qmlc
+*.jsc
+Makefile*
+*build-*
+*.qm
+
+# CMake
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+# IDE specific
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS specific
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
+*.log
+
+# Executable files
+*.exe
+*.app
+*.dmg
+*.deb
+*.rpm
+
+# FileOrganizer specific
+.fileorganizer_log.txt
+**/test_*
+**/*_backup*
+**/*_old*
