@@ -103,8 +103,6 @@ FileOrganizer/
 └── README.md                             # This file
 ```
 
-```
-
 ## Advanced Features
 
 ### Undo Functionality
@@ -155,4 +153,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Documentation
 
 For detailed technical documentation, including OOP principles implementation, architecture details, and code examples, see [DOCUMENTATION.md](DOCUMENTATION.md).
-```
