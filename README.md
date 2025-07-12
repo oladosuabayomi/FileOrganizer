@@ -13,7 +13,7 @@ Users often face challenges with disorganized folders containing mixed file type
 - **File Type Detection**: Automatically detects file types based on extensions
 - **Smart Categorization**: Sorts files into logical categories (Documents, Music, Videos, Images, Others)
 - **Object-Oriented Design**: Clean, maintainable C++ code using OOP principles
-- **Cross-Platform**: Built with modern C++17 filesystem API
+- **Cross-Platform**: Built with modern C++17 filesystem API.
 
 ### File Categories Supported
 
