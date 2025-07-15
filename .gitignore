@@ -1,23 +1,44 @@
-# Build directories
+# Build artifacts
 build/
-**/build/
+bin/
+*.exe
+*.o
+*.obj
 
-# Qt specific
-*.user
-*.pro.user
-*.pro.user.*
-*_qmlcache.qrc
-*.moc
-moc_*.cpp
-moc_*.h
-qrc_*.cpp
-ui_*.h
-*.rcc
-*.qmlc
-*.jsc
-Makefile*
-*build-*
-*.qm
+# IDE files
+.vscode/
+.vs/
+*.vcxproj*
+*.sln
+
+# CMake files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+.file_organizer_log.txt
+
+# Temporary files
+*.tmp
+*.temp
+temp_*
+
+# Backup files
+*~
+*.bak
+*.backup
+
+# Archive files
+*.zip
+*.tar.gz
+*.7z
 
 # CMake
 CMakeCache.txt
