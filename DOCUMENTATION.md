@@ -1,15 +1,18 @@
-# FileOrganizer - Technical Documentation
+# File Organizer - Technical Documentation
+
+**Version 1.0.0 - Production Release**
 
 ## Table of Contents
 
 1. [Problem Statement](#problem-statement)
 2. [Project Overview](#project-overview)
 3. [Benefits of the Solution](#benefits-of-the-solution)
-4. [Object-Oriented Programming Principles](#object-oriented-programming-principles)
-5. [Architecture and Design](#architecture-and-design)
-6. [How to Use the Project](#how-to-use-the-project)
-7. [Code Examples](#code-examples)
+4. [Architecture and Design](#architecture-and-design)
+5. [Build System](#build-system)
+6. [API Documentation](#api-documentation)
+7. [Usage Examples](#usage-examples)
 8. [Technical Implementation](#technical-implementation)
+9. [Extension and Customization](#extension-and-customization)
 
 ---
 
@@ -38,16 +41,18 @@ Modern computer users accumulate thousands of files across their systems, often 
 
 ### Solution Description
 
-FileOrganizer is a C++ command-line application that automatically categorizes and organizes files in a directory based on their file extensions. The application uses Object-Oriented Programming principles to create a maintainable, extensible, and robust file management system.
+File Organizer is a modern C++17 command-line application that automatically categorizes and organizes files in a directory based on their file extensions. The application uses a clean, single-responsibility architecture to create a maintainable, extensible, and robust file management system.
 
 ### Key Features
 
-- **Automatic file categorization** into predefined categories (Documents, Images, Music, Videos, Others)
-- **Undo functionality** with session-based tracking
+- **Automatic file categorization** into predefined categories (Documents, Images, Audio, Videos, Others)
+- **Complete undo functionality** with detailed session tracking
 - **Interactive and command-line modes** for different user preferences
-- **Safe file operations** with comprehensive error handling
+- **Safe file operations** with comprehensive error handling and logging
 - **Cross-platform compatibility** using C++17 filesystem API
-- **Extensible design** allowing easy addition of new file types and categories
+- **Zero external dependencies** - pure standard library implementation
+- **Professional command-line interface** with standard Unix-style arguments
+- **Session-based operation tracking** for granular undo control
 
 ### Target Users
 
@@ -55,6 +60,7 @@ FileOrganizer is a C++ command-line application that automatically categorizes a
 - **Photographers** organizing large image collections
 - **Content creators** managing mixed media files
 - **Students** organizing academic documents
+- **System administrators** automating file organization tasks
 - **Anyone** who struggles with file organization
 
 ---
@@ -96,44 +102,122 @@ FileOrganizer is a C++ command-line application that automatically categorizes a
 
 2. **Scalability**
 
-   - Handles directories with thousands of files
-   - Efficient processing with progress tracking
-   - Memory-efficient operation
+   - Handles directories with thousands of files efficiently
+   - Memory-efficient operation with smart resource management
+   - Batch processing capabilities for large file sets
 
 3. **User Experience**
    - Consistent interface across different usage modes
    - Clear feedback and progress indicators
    - Comprehensive help and documentation
+   - Detailed operation logging for transparency
 
 ---
 
-## Object-Oriented Programming Principles
+## Architecture and Design
 
-FileOrganizer demonstrates all four core OOP principles through its architecture:
+### Production Architecture (v1.0.0)
 
-### 1. Abstraction
+The File Organizer follows a clean, modern C++17 architecture emphasizing simplicity and maintainability:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    User Interface                        │
+│                                                         │
+│  ┌─────────────────┐    ┌─────────────────────────────┐ │
+│  │ Interactive CLI │    │   Command-Line Interface    │ │
+│  │    (main.cpp)   │    │       (main.cpp)           │ │
+│  └─────────────────┘    └─────────────────────────────┘ │
+└─────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────┐
+│                Core Business Logic                       │
+│                                                         │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │            FileOrganizer Class                   │  │
+│  │         (file_organizer.h/.cpp)                 │  │
+│  │                                                  │  │
+│  │  • list_files()                                 │  │
+│  │  • organize_directory()                         │  │
+│  │  • undo_organization()                          │  │
+│  │  • show_history()                               │  │
+│  │  • Session management                           │  │
+│  │  • Category mapping                             │  │
+│  │  • Error handling & logging                     │  │
+│  └──────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────┐
+│                C++17 Standard Library                   │
+│                                                         │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │
+│  │ std::        │  │ std::        │  │ std::        │ │
+│  │ filesystem   │  │ fstream      │  │ string       │ │
+│  └──────────────┘  └──────────────┘  └──────────────┘ │
+│                                                         │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │
+│  │ std::vector  │  │ std::map     │  │ std::chrono  │ │
+│  └──────────────┘  └──────────────┘  └──────────────┘ │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Project Structure
+
+```
+file-organizer/
+├── src/
+│   ├── main.cpp              # Application entry point and CLI
+│   ├── file_organizer.h      # FileOrganizer class declaration
+│   └── file_organizer.cpp    # FileOrganizer class implementation
+├── build/                    # Build output directory
+├── CMakeLists.txt           # CMake build configuration
+├── build.bat               # Windows build script
+├── run.sh                  # Unix/Linux build script
+├── README.md               # User documentation
+├── DOCUMENTATION.md        # Technical documentation (this file)
+├── LICENSE                 # MIT license
+└── .gitignore             # Git ignore rules
+```
+
+### Core Design Principles
+
+The current architecture follows these key principles:
+
+1. **Single Responsibility**: Each component has one clear purpose
+2. **Simplicity**: Minimal complexity while maintaining functionality
+3. **Maintainability**: Easy to understand, modify, and extend
+4. **Cross-platform**: Uses standard C++17 features only
+5. **Zero Dependencies**: No external libraries required
+
+### Object-Oriented Programming Principles
+
+While the current production version uses a simplified single-class architecture for maintainability, FileOrganizer demonstrates how Object-Oriented Programming principles can be applied to file management systems. Here are conceptual examples showing how the four core OOP principles could be implemented:
+
+#### 1. Abstraction
 
 **Definition**: Hiding complex implementation details while exposing only essential features.
 
-**Implementation in FileOrganizer**:
+**Conceptual Implementation for File Types**:
 
 ```cpp
-// File.h - Abstract base class
+// Abstract base class for file operations
 class File {
 public:
     virtual ~File() = default;
-    virtual QString getCategory() const = 0;  // Pure virtual function
-    virtual bool isValidType(const QString& extension) const = 0;
+    virtual std::string getCategory() const = 0;  // Pure virtual function
+    virtual bool isValidType(const std::string& extension) const = 0;
 
     // Common interface for all file types
-    QString getFilePath() const { return filePath; }
-    QString getFileName() const { return fileName; }
-    qint64 getFileSize() const { return fileSize; }
+    std::string getFilePath() const { return filePath; }
+    std::string getFileName() const { return fileName; }
+    size_t getFileSize() const { return fileSize; }
 
 protected:
-    QString filePath;
-    QString fileName;
-    qint64 fileSize;
+    std::string filePath;
+    std::string fileName;
+    size_t fileSize;
 };
 ```
 
@@ -143,32 +227,33 @@ protected:
 - Complex file type detection logic is hidden
 - Easy to work with different file types uniformly
 
-### 2. Encapsulation
+#### 2. Encapsulation
 
 **Definition**: Bundling data and methods together while controlling access to internal state.
 
-**Implementation in FileOrganizer**:
+**Conceptual Implementation**:
 
 ```cpp
 // ImageFile.cpp - Data and methods encapsulated
 class ImageFile : public File {
 private:
     // Private data members - controlled access
-    static const QStringList validExtensions;
-    QString resolution;
-    QString colorDepth;
+    static const std::vector<std::string> validExtensions;
+    std::string resolution;
+    std::string colorDepth;
 
 public:
     // Public interface controls access to data
-    QString getCategory() const override { return "Images"; }
+    std::string getCategory() const override { return "Images"; }
 
-    bool isValidType(const QString& extension) const override {
-        return validExtensions.contains(extension.toLower());
+    bool isValidType(const std::string& extension) const override {
+        return std::find(validExtensions.begin(), validExtensions.end(),
+                        extension) != validExtensions.end();
     }
 
     // Controlled access to internal data
-    QString getResolution() const { return resolution; }
-    void setResolution(const QString& res) { resolution = res; }
+    std::string getResolution() const { return resolution; }
+    void setResolution(const std::string& res) { resolution = res; }
 
 private:
     // Private helper methods
@@ -183,11 +268,11 @@ private:
 - Data validation is enforced through controlled methods
 - Class maintains its own invariants
 
-### 3. Inheritance
+#### 3. Inheritance
 
 **Definition**: Creating new classes based on existing classes, inheriting properties and methods.
 
-**Implementation in FileOrganizer**:
+**Conceptual Implementation**:
 
 ```cpp
 // Base class
@@ -198,33 +283,45 @@ class File {
 // Derived classes inherit from File
 class DocumentFile : public File {
 public:
-    QString getCategory() const override { return "Documents"; }
-    bool isValidType(const QString& extension) const override {
-        // Document-specific validation
+    std::string getCategory() const override { return "Documents"; }
+    bool isValidType(const std::string& extension) const override {
+        static const std::vector<std::string> docExtensions =
+            {"pdf", "doc", "docx", "txt", "rtf", "odt"};
+        return std::find(docExtensions.begin(), docExtensions.end(),
+                        extension) != docExtensions.end();
     }
 };
 
 class AudioFile : public File {
 public:
-    QString getCategory() const override { return "Music"; }
-    bool isValidType(const QString& extension) const override {
-        // Audio-specific validation
+    std::string getCategory() const override { return "Audio"; }
+    bool isValidType(const std::string& extension) const override {
+        static const std::vector<std::string> audioExtensions =
+            {"mp3", "wav", "flac", "aac", "ogg", "m4a"};
+        return std::find(audioExtensions.begin(), audioExtensions.end(),
+                        extension) != audioExtensions.end();
     }
 };
 
 class VideoFile : public File {
 public:
-    QString getCategory() const override { return "Videos"; }
-    bool isValidType(const QString& extension) const override {
-        // Video-specific validation
+    std::string getCategory() const override { return "Videos"; }
+    bool isValidType(const std::string& extension) const override {
+        static const std::vector<std::string> videoExtensions =
+            {"mp4", "avi", "mkv", "mov", "wmv", "flv"};
+        return std::find(videoExtensions.begin(), videoExtensions.end(),
+                        extension) != videoExtensions.end();
     }
 };
 
 class ImageFile : public File {
 public:
-    QString getCategory() const override { return "Images"; }
-    bool isValidType(const QString& extension) const override {
-        // Image-specific validation
+    std::string getCategory() const override { return "Images"; }
+    bool isValidType(const std::string& extension) const override {
+        static const std::vector<std::string> imageExtensions =
+            {"jpg", "jpeg", "png", "gif", "bmp", "tiff", "svg"};
+        return std::find(imageExtensions.begin(), imageExtensions.end(),
+                        extension) != imageExtensions.end();
     }
 };
 ```
@@ -235,53 +332,60 @@ public:
 - Consistent interface: All file types share the same basic structure
 - Easy extension: New file types can be added by inheriting from File
 
-### 4. Polymorphism
+#### 4. Polymorphism
 
 **Definition**: Objects of different types can be treated uniformly through a common interface.
 
-**Implementation in FileOrganizer**:
+**Conceptual Implementation**:
 
 ```cpp
 // FileHandler.cpp - Polymorphism in action
-void FileHandler::organizeFolder(const QString& folderPath) {
-    QDir dir(folderPath);
-    QFileInfoList fileList = dir.entryInfoList(QDir::Files);
+class FileHandler {
+public:
+    void organizeFolder(const std::string& folderPath) {
+        std::filesystem::directory_iterator dirIter(folderPath);
 
-    for (const QFileInfo& fileInfo : fileList) {
-        // Create appropriate file object based on extension
-        std::unique_ptr<File> file = createFileObject(fileInfo);
+        for (const auto& entry : dirIter) {
+            if (entry.is_regular_file()) {
+                // Create appropriate file object based on extension
+                std::unique_ptr<File> file = createFileObject(entry);
 
-        if (file) {
-            // Polymorphic call - different behavior for each file type
-            QString category = file->getCategory();  // Calls appropriate override
-            bool isValid = file->isValidType(fileInfo.suffix());  // Polymorphic
+                if (file) {
+                    // Polymorphic call - different behavior for each file type
+                    std::string category = file->getCategory();  // Calls appropriate override
+                    std::string ext = entry.path().extension().string();
+                    bool isValid = file->isValidType(ext);  // Polymorphic
 
-            if (isValid) {
-                moveFileToCategory(file.get(), category);
+                    if (isValid) {
+                        moveFileToCategory(file.get(), category);
+                    }
+                }
             }
         }
     }
-}
 
-std::unique_ptr<File> FileHandler::createFileObject(const QFileInfo& fileInfo) {
-    QString extension = fileInfo.suffix().toLower();
+private:
+    std::unique_ptr<File> createFileObject(const std::filesystem::directory_entry& entry) {
+        std::string extension = entry.path().extension().string();
+        std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 
-    // Factory pattern using polymorphism
-    if (ImageFile().isValidType(extension)) {
-        return std::make_unique<ImageFile>();
-    }
-    else if (AudioFile().isValidType(extension)) {
-        return std::make_unique<AudioFile>();
-    }
-    else if (VideoFile().isValidType(extension)) {
-        return std::make_unique<VideoFile>();
-    }
-    else if (DocumentFile().isValidType(extension)) {
-        return std::make_unique<DocumentFile>();
-    }
+        // Factory pattern using polymorphism
+        if (ImageFile().isValidType(extension)) {
+            return std::make_unique<ImageFile>();
+        }
+        else if (AudioFile().isValidType(extension)) {
+            return std::make_unique<AudioFile>();
+        }
+        else if (VideoFile().isValidType(extension)) {
+            return std::make_unique<VideoFile>();
+        }
+        else if (DocumentFile().isValidType(extension)) {
+            return std::make_unique<DocumentFile>();
+        }
 
-    return nullptr;  // Unknown file type
-}
+        return nullptr;  // Unknown file type
+    }
+};
 ```
 
 **Benefits**:
@@ -290,11 +394,9 @@ std::unique_ptr<File> FileHandler::createFileObject(const QFileInfo& fileInfo) {
 - Easy to add new file types without modifying existing code
 - Runtime behavior determined by actual object type
 
----
+### Alternative OOP Architecture
 
-## Architecture and Design
-
-### System Architecture
+If implementing a full OOP design, the system architecture could look like:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -345,7 +447,7 @@ std::unique_ptr<File> FileHandler::createFileObject(const QFileInfo& fileInfo) {
 └─────────────────────────────────────────────────────────┘
 ```
 
-### Class Relationships
+### Class Relationships (OOP Design)
 
 ```cpp
 // Class hierarchy showing OOP relationships
@@ -360,31 +462,36 @@ FileHandler (Composition)
 ├── Manages file operations
 └── Tracks undo sessions
 
-SimpleFileOrganizer (Main Application)
+FileOrganizer (Main Application)
 ├── Contains FileHandler (Composition)
 ├── Manages user interface
 └── Coordinates application flow
 ```
 
+**Note**: The current production version prioritizes simplicity and maintainability with a single `FileOrganizer` class that handles all functionality directly. The OOP examples above demonstrate how the system could be designed using classical object-oriented patterns for educational purposes or future extensibility requirements.
+
 ---
 
-## How to Use the Project
+## Build System
 
 ### Prerequisites
 
-- C++ compiler with C++17 support (g++, clang++, MSVC)
+- C++ compiler with C++17 support (g++, clang++, MSVC 2017+)
 - Windows, Linux, or macOS operating system
+- CMake 3.10+ (optional, for CMake builds)
 
-### Installation
+### Installation and Building
 
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/oladosuabayomi/FileOrganizer.git
+   git clone https://github.com/your-username/FileOrganizer.git
    cd FileOrganizer
    ```
 
-2. **Build the Application**
+2. **Build Options**
+
+   **Option A: Using Build Scripts (Recommended)**
 
    **Windows:**
 
@@ -399,43 +506,138 @@ SimpleFileOrganizer (Main Application)
    ./run.sh
    ```
 
-   **Manual Build (Recommended):**
+   **Option B: Using CMake**
+
+   ```bash
+   mkdir build
+   cd build
+   cmake ..
+   make  # Linux/Mac
+   # OR
+   cmake --build . --config Release  # Cross-platform
+   ```
+
+   **Option C: Direct Compilation**
 
    ```bash
    # Create build directory
    mkdir build
 
-   # Compile with static linking (resolves linker issues)
-   g++ -std=c++17 -static -o build/FileOrganizerWithUndo.exe src/main_simple_cli_with_undo.cpp
+   # Compile with static linking (recommended)
+   g++ -std=c++17 -static -O2 -o build/file-organizer src/main.cpp src/file_organizer.cpp
+
+   # Or without static linking
+   g++ -std=c++17 -O2 -o build/file-organizer src/main.cpp src/file_organizer.cpp
    ```
 
-   **Note**: Static linking (`-static` flag) is recommended to avoid dynamic library dependency issues during runtime.
+### Build Notes
+
+- **Static Linking**: The `-static` flag is recommended on Windows to avoid runtime library dependencies
+- **Optimization**: Use `-O2` or `-O3` for release builds
+- **Debug Builds**: Add `-g -DDEBUG` for debugging builds
+- **Cross-Platform**: The code uses only standard C++17 features for maximum compatibility
+
+---
+
+## API Documentation
+
+### FileOrganizer Class
+
+The core `FileOrganizer` class provides all file organization functionality:
+
+```cpp
+class FileOrganizer {
+public:
+    // Main operations
+    void list_files(const std::string& directory_path);
+    bool organize_directory(const std::string& directory_path);
+    bool undo_organization(const std::string& directory_path, const std::string& session_id = "");
+    void show_history(const std::string& directory_path);
+
+    // Utility methods
+    bool is_valid_directory(const std::string& path);
+    std::string get_last_session_id(const std::string& directory_path);
+
+private:
+    // File categorization
+    std::string get_file_category(const std::string& extension);
+    std::map<std::string, std::vector<std::string>> get_extension_categories();
+
+    // Session management
+    std::string generate_session_id();
+    bool log_file_move(const std::string& session_id, const std::string& from, const std::string& to);
+    bool restore_from_log(const std::string& directory_path, const std::string& session_id);
+};
+```
+
+### Method Details
+
+#### `list_files(const std::string& directory_path)`
+
+- **Purpose**: Lists all files in the directory with their current and target categories
+- **Parameters**: `directory_path` - Path to the directory to analyze
+- **Output**: Displays files categorized by type with size information
+
+#### `organize_directory(const std::string& directory_path)`
+
+- **Purpose**: Organizes all files in the directory into category folders
+- **Parameters**: `directory_path` - Path to the directory to organize
+- **Returns**: `true` if successful, `false` if errors occurred
+- **Side Effects**: Creates category folders and moves files, generates session log
+
+#### `undo_organization(const std::string& directory_path, const std::string& session_id)`
+
+- **Purpose**: Undoes a previous organization operation
+- **Parameters**:
+  - `directory_path` - Path to the directory to restore
+  - `session_id` - Specific session to undo (optional, defaults to last session)
+- **Returns**: `true` if successful, `false` if errors occurred
+- **Side Effects**: Moves files back to original locations, removes empty category folders
+
+#### `show_history(const std::string& directory_path)`
+
+- **Purpose**: Displays the history of organization sessions for a directory
+- **Parameters**: `directory_path` - Path to the directory
+- **Output**: Lists all available sessions with timestamps and file counts
+
+---
+
+## Usage Examples
+
+**Note**: The following examples show Windows paths (with `.exe` extension). For Linux/macOS, remove the `.exe` extension from all executable names.
 
 ### Usage Modes
 
 #### 1. Interactive Mode (Recommended for Beginners)
 
 ```bash
-./build/FileOrganizerWithUndo.exe --interactive
+# CMake build (Windows)
+./build/bin/Release/file-organizer.exe --interactive
+
+# Direct compilation (Windows)
+./build/file-organizer.exe --interactive
+
+# Linux/macOS - remove .exe extension
+./build/bin/file-organizer --interactive
 ```
 
 **Interactive Session Example:**
 
 ```
-=== FileOrganizer CLI - Interactive Mode ===
+=== File Organizer CLI - Interactive Mode ===
 
 Commands:
-  1. Organize folder
-  2. List files in folder
+  1. List files in directory
+  2. Organize directory
   3. Undo last organization
   4. Show organization history
   5. Exit
 
-Enter your choice (1-5): 1
-Enter folder path to organize: C:\Users\John\Downloads
+Enter your choice (1-5): 2
+Enter directory path to organize: /home/user/Downloads
 
-Starting file organization in: C:\Users\John\Downloads
-Session ID: 20250711_143022
+Starting file organization in: /home/user/Downloads
+Session ID: 20250115_143022
 Found 25 files to organize.
 ----------------------------------------
 ✓ Moved: report.pdf -> Documents/
@@ -445,7 +647,7 @@ Progress: 2/25 (8%)
 ...
 ----------------------------------------
 File organization completed! Processed 25 files.
-To undo this operation, use: --undo "C:\Users\John\Downloads" 20250711_143022
+To undo this operation, use: --undo "/home/user/Downloads" 20250115_143022
 ```
 
 #### 2. Command-Line Mode (For Automation)
@@ -453,31 +655,35 @@ To undo this operation, use: --undo "C:\Users\John\Downloads" 20250711_143022
 **List Files Before Organizing:**
 
 ```bash
-./build/FileOrganizerWithUndo.exe --list "C:\Users\John\Downloads"
+# CMake build (Windows)
+./build/bin/Release/file-organizer.exe --list "/home/user/Downloads"
+
+# Direct compilation (Windows)
+./build/file-organizer.exe --list "/home/user/Downloads"
 ```
 
 **Organize Files:**
 
 ```bash
-./build/FileOrganizerWithUndo.exe --organize "C:\Users\John\Downloads"
+./build/bin/Release/file-organizer.exe --organize "/home/user/Downloads"
 ```
 
 **Undo Last Operation:**
 
 ```bash
-./build/FileOrganizerWithUndo.exe --undo "C:\Users\John\Downloads"
+./build/bin/Release/file-organizer.exe --undo "/home/user/Downloads"
 ```
 
 **View Organization History:**
 
 ```bash
-./build/FileOrganizerWithUndo.exe --history "C:\Users\John\Downloads"
+./build/bin/Release/file-organizer.exe --history "/home/user/Downloads"
 ```
 
 **Undo Specific Session:**
 
 ```bash
-./build/FileOrganizerWithUndo.exe --undo "C:\Users\John\Downloads" 20250711_143022
+./build/bin/Release/file-organizer.exe --undo "/home/user/Downloads" 20250115_143022
 ```
 
 ### Understanding the Output
@@ -485,11 +691,11 @@ To undo this operation, use: --undo "C:\Users\John\Downloads" 20250711_143022
 #### File Listing
 
 ```
-Files in C:\Users\John\Downloads:
+Files in /home/user/Downloads:
 ----------------------------------------
   document.pdf -> Documents (1.2 MB)
   photo.jpg -> Images (3.4 MB)
-  song.mp3 -> Music (4.1 MB)
+  song.mp3 -> Audio (4.1 MB)
   video.mp4 -> Videos (15.7 MB)
   archive.zip -> Others (2.3 MB)
 ```
@@ -497,15 +703,15 @@ Files in C:\Users\John\Downloads:
 #### Organization Process
 
 ```
-Starting file organization in: C:\Users\John\Downloads
-Session ID: 20250711_143022
+Starting file organization in: /home/user/Downloads
+Session ID: 20250115_143022
 Found 5 files to organize.
 ----------------------------------------
 ✓ Moved: document.pdf -> Documents/
 Progress: 1/5 (20%)
 ✓ Moved: photo.jpg -> Images/
 Progress: 2/5 (40%)
-✓ Moved: song.mp3 -> Music/
+✓ Moved: song.mp3 -> Audio/
 Progress: 3/5 (60%)
 ✓ Moved: video.mp4 -> Videos/
 Progress: 4/5 (80%)
@@ -513,7 +719,7 @@ Progress: 4/5 (80%)
 Progress: 5/5 (100%)
 ----------------------------------------
 File organization completed! Processed 5 files.
-To undo this operation, use: --undo "C:\Users\John\Downloads" 20250711_143022
+To undo this operation, use: --undo "/home/user/Downloads" 20250115_143022
 ```
 
 #### Undo Process
@@ -528,12 +734,24 @@ Undoing 5 file moves...
 ✓ Restored: document.pdf
 Removed empty folder: Others
 Removed empty folder: Videos
-Removed empty folder: Music
+Removed empty folder: Audio
 Removed empty folder: Images
 Removed empty folder: Documents
 ----------------------------------------
 Undo completed! Restored 5 files.
 ```
+
+### File Categories
+
+The application automatically categorizes files into these folders based on file extensions:
+
+| Category      | Extensions                                                    |
+| ------------- | ------------------------------------------------------------- |
+| **Documents** | .pdf, .doc, .docx, .txt, .rtf, .odt, .xls, .xlsx, .ppt, .pptx |
+| **Images**    | .jpg, .jpeg, .png, .gif, .bmp, .tiff, .svg, .webp             |
+| **Audio**     | .mp3, .wav, .flac, .aac, .ogg, .m4a, .wma                     |
+| **Videos**    | .mp4, .avi, .mkv, .mov, .wmv, .flv, .webm, .m4v               |
+| **Others**    | All other file types                                          |
 
 ### Best Practices
 
@@ -556,223 +774,194 @@ Undo completed! Restored 5 files.
    - For automation, integrate into scripts:
      ```bash
      #!/bin/bash
-     # Organize multiple folders
-     ./build/FileOrganizerWithUndo.exe --organize "/home/user/Downloads"
-     ./build/FileOrganizerWithUndo.exe --organize "/home/user/Desktop"
+     # Organize multiple folders (Windows paths shown)
+     ./build/bin/Release/file-organizer.exe --organize "/home/user/Downloads"
+     ./build/bin/Release/file-organizer.exe --organize "/home/user/Desktop"
+     ./build/bin/Release/file-organizer.exe --organize "/home/user/Documents/Unsorted"
      ```
-
----
-
-## Code Examples
-
-### Adding a New File Type
-
-To demonstrate the extensibility of the OOP design, here's how to add a new file type:
-
-```cpp
-// Step 1: Create new file type class
-// src/core/ArchiveFile.h
-#ifndef ARCHIVEFILE_H
-#define ARCHIVEFILE_H
-
-#include "File.h"
-#include <QStringList>
-
-class ArchiveFile : public File {
-public:
-    ArchiveFile();
-
-    QString getCategory() const override;
-    bool isValidType(const QString& extension) const override;
-
-    // Archive-specific methods
-    QString getCompressionType() const;
-    bool isPasswordProtected() const;
-
-private:
-    static const QStringList validExtensions;
-    QString compressionType;
-    bool passwordProtected;
-
-    void detectArchiveProperties();
-};
-
-#endif // ARCHIVEFILE_H
-```
-
-```cpp
-// src/core/ArchiveFile.cpp
-#include "ArchiveFile.h"
-
-const QStringList ArchiveFile::validExtensions = {
-    ".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz"
-};
-
-ArchiveFile::ArchiveFile() : passwordProtected(false) {
-    // Initialize archive-specific properties
-}
-
-QString ArchiveFile::getCategory() const {
-    return "Archives";
-}
-
-bool ArchiveFile::isValidType(const QString& extension) const {
-    return validExtensions.contains(extension.toLower());
-}
-
-QString ArchiveFile::getCompressionType() const {
-    return compressionType;
-}
-
-bool ArchiveFile::isPasswordProtected() const {
-    return passwordProtected;
-}
-
-void ArchiveFile::detectArchiveProperties() {
-    // Implementation for detecting archive properties
-}
-```
-
-```cpp
-// Step 2: Update FileHandler to use new type
-// In FileHandler::createFileObject(), add:
-else if (ArchiveFile().isValidType(extension)) {
-    return std::make_unique<ArchiveFile>();
-}
-```
-
-### Custom File Processing
-
-```cpp
-// Example of polymorphic processing
-void FileHandler::processSpecialFiles(const QStringList& filePaths) {
-    for (const QString& filePath : filePaths) {
-        QFileInfo fileInfo(filePath);
-        std::unique_ptr<File> file = createFileObject(fileInfo);
-
-        if (file) {
-            // Polymorphic behavior based on actual file type
-            QString category = file->getCategory();
-
-            // Type-specific processing
-            if (auto* imageFile = dynamic_cast<ImageFile*>(file.get())) {
-                // Special processing for images
-                processImageMetadata(imageFile);
-            }
-            else if (auto* audioFile = dynamic_cast<AudioFile*>(file.get())) {
-                // Special processing for audio
-                processAudioTags(audioFile);
-            }
-
-            // Common processing for all types
-            moveFileToCategory(file.get(), category);
-        }
-    }
-}
-```
 
 ---
 
 ## Technical Implementation
 
+### Core Algorithm
+
+The file organization algorithm follows these steps:
+
+1. **Directory Validation**: Verify the target directory exists and is accessible
+2. **File Discovery**: Scan the directory for all regular files (non-directories)
+3. **Extension Analysis**: Extract and normalize file extensions
+4. **Category Mapping**: Map extensions to predefined categories
+5. **Folder Creation**: Create category folders if they don't exist
+6. **File Movement**: Move files to appropriate category folders
+7. **Session Logging**: Record all operations for undo functionality
+8. **Progress Reporting**: Provide real-time feedback to the user
+
 ### File Detection Algorithm
 
 ```cpp
-// Simplified version of the file detection logic
-std::unique_ptr<File> FileHandler::createFileObject(const QFileInfo& fileInfo) {
-    QString extension = fileInfo.suffix().toLower();
+std::string FileOrganizer::get_file_category(const std::string& extension) {
+    // Convert to lowercase for case-insensitive comparison
+    std::string ext = extension;
+    std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
 
-    // Use polymorphism to determine file type
-    std::vector<std::unique_ptr<File>> fileTypes = {
-        std::make_unique<ImageFile>(),
-        std::make_unique<AudioFile>(),
-        std::make_unique<VideoFile>(),
-        std::make_unique<DocumentFile>()
+    // Remove leading dot if present
+    if (!ext.empty() && ext[0] == '.') {
+        ext = ext.substr(1);
+    }
+
+    // Category mapping
+    static const std::map<std::string, std::vector<std::string>> categories = {
+        {"Documents", {"pdf", "doc", "docx", "txt", "rtf", "odt", "xls", "xlsx", "ppt", "pptx"}},
+        {"Images", {"jpg", "jpeg", "png", "gif", "bmp", "tiff", "svg", "webp"}},
+        {"Audio", {"mp3", "wav", "flac", "aac", "ogg", "m4a", "wma"}},
+        {"Videos", {"mp4", "avi", "mkv", "mov", "wmv", "flv", "webm", "m4v"}}
     };
 
-    for (auto& fileType : fileTypes) {
-        if (fileType->isValidType(extension)) {
-            // Return copy of the matching type
-            return std::unique_ptr<File>(fileType.release());
+    // Search for extension in categories
+    for (const auto& [category, extensions] : categories) {
+        if (std::find(extensions.begin(), extensions.end(), ext) != extensions.end()) {
+            return category;
         }
     }
 
-    return nullptr; // Unknown file type -> "Others" category
+    return "Others";  // Default category for unknown extensions
 }
 ```
 
 ### Session Management
 
+The application uses a robust session management system to track file operations:
+
 ```cpp
-// Session tracking for undo functionality
-class SessionManager {
-private:
-    struct FileOperation {
-        QString originalPath;
-        QString newPath;
-        QString timestamp;
-        QString sessionId;
-    };
+std::string FileOrganizer::generate_session_id() {
+    auto now = std::chrono::system_clock::now();
+    auto time_t = std::chrono::system_clock::to_time_t(now);
 
-    std::vector<FileOperation> operations;
-    QString logFilePath;
+    std::stringstream ss;
+    ss << std::put_time(std::localtime(&time_t), "%Y%m%d_%H%M%S");
+    return ss.str();
+}
 
-public:
-    QString createSession() {
-        QDateTime now = QDateTime::currentDateTime();
-        return now.toString("yyyyMMdd_hhmmss");
+bool FileOrganizer::log_file_move(const std::string& session_id,
+                                  const std::string& from,
+                                  const std::string& to) {
+    // Create log file path
+    std::string log_path = std::filesystem::path(from).parent_path() / ".file_organizer_log.txt";
+
+    std::ofstream log_file(log_path, std::ios::app);
+    if (!log_file.is_open()) {
+        return false;
     }
 
-    void logOperation(const QString& sessionId,
-                     const QString& originalPath,
-                     const QString& newPath) {
-        FileOperation op = {originalPath, newPath,
-                           QDateTime::currentDateTime().toString(),
-                           sessionId};
-        operations.push_back(op);
-        writeToLogFile(op);
-    }
+    // Log entry format: timestamp|session_id|operation|from_path|to_path
+    auto now = std::chrono::system_clock::now();
+    auto time_t = std::chrono::system_clock::to_time_t(now);
 
-    bool undoSession(const QString& sessionId) {
-        // Implementation for session-based undo
-        return true;
-    }
-};
+    log_file << std::put_time(std::localtime(&time_t), "%Y-%m-%d %H:%M:%S")
+             << "|" << session_id
+             << "|MOVE|" << from
+             << "|" << to << std::endl;
+
+    return true;
+}
 ```
 
 ### Error Handling
 
+The application implements comprehensive error handling:
+
 ```cpp
-// Robust error handling throughout the application
-bool FileHandler::moveFileToCategory(const QString& filePath,
-                                   const QString& category) {
+bool FileOrganizer::organize_directory(const std::string& directory_path) {
     try {
-        QFileInfo fileInfo(filePath);
-        QString targetDir = createCategoryDirectory(category);
-        QString targetPath = targetDir + "/" + fileInfo.fileName();
-
-        // Check for conflicts
-        if (QFile::exists(targetPath)) {
-            targetPath = resolveNameConflict(targetPath);
-        }
-
-        // Perform the move operation
-        if (QFile::rename(filePath, targetPath)) {
-            // Log successful operation
-            sessionManager->logOperation(currentSessionId, filePath, targetPath);
-            emit fileProcessed(fileInfo.fileName(), category);
-            return true;
-        } else {
-            // Handle move failure
-            emit errorOccurred("Failed to move file: " + filePath);
+        // Validate directory
+        if (!is_valid_directory(directory_path)) {
+            std::cerr << "Error: Invalid directory path: " << directory_path << std::endl;
             return false;
         }
 
+        // Generate session ID
+        std::string session_id = generate_session_id();
+
+        // Process files with error handling
+        std::error_code ec;
+        for (const auto& entry : std::filesystem::directory_iterator(directory_path, ec)) {
+            if (ec) {
+                std::cerr << "Warning: Cannot access some files in directory" << std::endl;
+                continue;
+            }
+
+            if (entry.is_regular_file()) {
+                // Process individual file with error handling
+                if (!process_file(entry.path(), session_id)) {
+                    std::cerr << "Warning: Failed to process file: "
+                              << entry.path().filename() << std::endl;
+                }
+            }
+        }
+
+        return true;
+
     } catch (const std::exception& e) {
-        emit errorOccurred("Exception occurred: " + QString(e.what()));
+        std::cerr << "Error during organization: " << e.what() << std::endl;
         return false;
     }
 }
 ```
 
-This documentation demonstrates how FileOrganizer effectively implements all four OOP principles while solving a real-world problem through clean, maintainable code architecture.
+---
+
+## Extension and Customization
+
+### Adding New File Categories
+
+To add support for new file types, modify the category mapping in `file_organizer.cpp`:
+
+```cpp
+// In get_extension_categories() method
+std::map<std::string, std::vector<std::string>> FileOrganizer::get_extension_categories() {
+    return {
+        {"Documents", {"pdf", "doc", "docx", "txt", "rtf", "odt", "xls", "xlsx", "ppt", "pptx"}},
+        {"Images", {"jpg", "jpeg", "png", "gif", "bmp", "tiff", "svg", "webp"}},
+        {"Audio", {"mp3", "wav", "flac", "aac", "ogg", "m4a", "wma"}},
+        {"Videos", {"mp4", "avi", "mkv", "mov", "wmv", "flv", "webm", "m4v"}},
+        {"Archives", {"zip", "rar", "7z", "tar", "gz", "bz2"}},  // New category
+        {"Code", {"cpp", "h", "py", "js", "html", "css", "java"}}  // New category
+    };
+}
+```
+
+### Custom Organization Rules
+
+For more complex organization logic, extend the `get_file_category` method:
+
+```cpp
+std::string FileOrganizer::get_file_category(const std::string& extension) {
+    std::string category = get_basic_category(extension);
+
+    // Custom rules can be added here
+    if (category == "Others") {
+        // Special handling for unknown extensions
+        if (is_executable_extension(extension)) {
+            return "Executables";
+        }
+        if (is_config_file(extension)) {
+            return "Configuration";
+        }
+    }
+
+    return category;
+}
+```
+
+### Integration with Build Systems
+
+The File Organizer can be integrated into build systems for automated cleanup:
+
+```cmake
+# CMakeLists.txt example
+add_custom_target(organize_downloads
+    COMMAND ${CMAKE_BINARY_DIR}/file-organizer --organize "${HOME}/Downloads"
+    COMMENT "Organizing downloads folder"
+)
+```

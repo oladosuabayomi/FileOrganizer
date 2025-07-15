@@ -1,206 +1,185 @@
-# FileOrganizer
+# File Organizer
 
-FileOrganizer is a C++ desktop application designed to help users automatically organize their cluttered folders by sorting files into well-defined subfolders based on their file types. This application scans a specified directory and categorizes files into folders such as Documents, Music, Videos, Images, and Others.
+A professional C++ command-line application for automatic file organization by type. Organizes cluttered directories into categorized subdirectories with full undo capabilities.
 
-## Problem Statement
+## Overview
 
-Users often face challenges with disorganized folders containing mixed file types. FileOrganizer addresses this issue by providing a simple solution to automatically sort files into appropriate categories, making it easier for users to find and manage their files.
+File Organizer scans a directory and automatically sorts files into predefined categories based on file extensions. The application provides safe file operations with complete undo functionality and session tracking.
 
 ## Features
 
-### Core Features
+- Automatic file categorization by extension
+- Safe file operations with error handling
+- Complete undo functionality with session tracking
+- Cross-platform compatibility (Windows, Linux, macOS)
+- Interactive and command-line modes
+- Progress tracking and detailed logging
 
-- **File Type Detection**: Automatically detects file types based on extensions
-- **Smart Categorization**: Sorts files into logical categories (Documents, Music, Videos, Images, Others)
-- **Object-Oriented Design**: Clean, maintainable C++ code using OOP principles
-- **Cross-Platform**: Built with modern C++17 filesystem API.
+## Supported File Types
 
-### File Categories Supported
+| Category  | Extensions                                                                                       |
+| --------- | ------------------------------------------------------------------------------------------------ |
+| Documents | `.pdf`, `.doc`, `.docx`, `.txt`, `.rtf`, `.odt`, `.xls`, `.xlsx`, `.ppt`, `.pptx`, `.csv`, `.md` |
+| Images    | `.jpg`, `.jpeg`, `.png`, `.gif`, `.bmp`, `.tiff`, `.svg`, `.webp`, `.ico`                        |
+| Videos    | `.mp4`, `.avi`, `.mkv`, `.mov`, `.wmv`, `.flv`, `.webm`, `.m4v`, `.3gp`                          |
+| Audio     | `.mp3`, `.wav`, `.flac`, `.aac`, `.ogg`, `.wma`, `.m4a`, `.opus`                                 |
+| Others    | All other file types                                                                             |
 
-- **Documents**: .pdf, .doc, .docx, .txt, .rtf, .odt, .xls, .xlsx, .ppt, .pptx, .csv, .md
-- **Music**: .mp3, .wav, .flac, .aac, .ogg, .wma, .m4a, .opus
-- **Videos**: .mp4, .avi, .mkv, .mov, .wmv, .flv, .webm, .m4v, .3gp
-- **Images**: .jpg, .jpeg, .png, .gif, .bmp, .tiff, .svg, .webp, .ico
-- **Others**: All other file types
+## Requirements
 
-### Available Versions
+- C++17 compatible compiler (GCC 7.0+, Clang 5.0+, MSVC 2017+)
+- CMake 3.12 or higher
+- Operating System: Windows 10+, Ubuntu 18.04+, macOS 10.14+
 
-**FileOrganizerWithUndo.exe**: Production-ready CLI application with full functionality including undo operations and session history
+## Installation
 
-## Getting Started
-
-### Prerequisites
-
-- C++ compiler with C++17 support (g++, clang++, MSVC)
-- Windows, Linux, or macOS
-
-### Installation
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/oladosuabayomi/FileOrganizer.git
-   cd FileOrganizer
-   ```
-
-2. Build the project:
-
-   ```bash
-   # For Windows
-   build.bat
-
-   # For Linux/Mac
-   chmod +x run.sh
-   ./run.sh
-
-   # Manual compilation (recommended - static linking to avoid linker issues)
-   mkdir build
-   g++ -std=c++17 -static -o build/FileOrganizerWithUndo.exe src/main_simple_cli_with_undo.cpp
-   ```
-
-   **Note**: If you encounter linker errors, use the static linking option (`-static` flag) which resolves dynamic library dependencies.
-
-### Usage
+### Quick Build
 
 ```bash
-# Show help
-./build/FileOrganizerWithUndo.exe --help
+# Clone repository
+git clone https://github.com/username/file-organizer.git
+cd file-organizer
 
-# Interactive mode (recommended for beginners)
-./build/FileOrganizerWithUndo.exe --interactive
+# Build using CMake
+mkdir build && cd build
+cmake ..
+make
 
-# List files and their categories (preview mode)
-./build/FileOrganizerWithUndo.exe --list "C:\path\to\folder"
-
-# Organize files
-./build/FileOrganizerWithUndo.exe --organize "C:\path\to\folder"
-
-# Undo last organization
-./build/FileOrganizerWithUndo.exe --undo "C:\path\to\folder"
-
-# Undo specific session
-./build/FileOrganizerWithUndo.exe --undo "C:\path\to\folder" 20250711_143022
-
-# Show organization history
-./build/FileOrganizerWithUndo.exe --history "C:\path\to\folder"
+# Alternative: Direct compilation
+g++ -std=c++17 -O2 -o build/file-organizer src/main.cpp src/file_organizer.cpp
 ```
 
-**Windows Users**: Use `build\FileOrganizerWithUndo.exe` instead of `./build/FileOrganizerWithUndo.exe`
+### Platform-Specific Instructions
 
-**Cross-Platform Path Examples**:
+**Windows:**
 
-- Windows: `"C:\Users\YourName\Downloads"`
-- Linux/Mac: `"/home/username/Downloads"` or `"~/Downloads"`
+```cmd
+build.bat
+```
+
+**Linux/macOS:**
+
+```bash
+chmod +x run.sh
+./run.sh
+```
+
+## Usage
+
+### Executable Locations
+
+After building, the executable will be located at:
+
+- **CMake build**: `./build/bin/Release/file-organizer.exe` (Windows) or `./build/bin/file-organizer` (Linux/macOS)
+- **Direct compilation**: `./build/file-organizer.exe` (Windows) or `./build/file-organizer` (Linux/macOS)
+
+**Note**: The `run.sh` script automatically detects your platform and shows the correct path after building.
+
+**Tip**: For easier usage, you can create an alias:
+
+```bash
+# For Windows (Git Bash/MSYS)
+alias file-organizer='./build/bin/Release/file-organizer.exe'
+
+# For Linux/macOS
+alias file-organizer='./build/bin/file-organizer'
+
+# Then use simply:
+file-organizer --help
+```
+
+### Command Line Interface
+
+```bash
+# Display help (Windows paths shown, adjust .exe for Linux/macOS)
+./build/bin/Release/file-organizer.exe --help   # CMake build
+# OR
+./build/file-organizer.exe --help               # Direct compilation
+
+# List files (preview mode)
+./build/bin/Release/file-organizer.exe --list /path/to/directory
+
+# Organize files
+./build/bin/Release/file-organizer.exe --organize /path/to/directory
+
+# Interactive mode
+./build/bin/Release/file-organizer.exe --interactive
+
+# Undo operations
+./build/bin/Release/file-organizer.exe --undo /path/to/directory
+./build/bin/Release/file-organizer.exe --undo /path/to/directory --session SESSION_ID
+
+# View history
+./build/bin/Release/file-organizer.exe --history /path/to/directory
+```
+
+### Examples
+
+```bash
+# Organize Downloads folder (Windows Git Bash/MSYS)
+./build/bin/Release/file-organizer.exe --organize ~/Downloads
+
+# Preview organization without moving files
+./build/bin/Release/file-organizer.exe --list ~/Downloads
+
+# Interactive mode for guided operation
+./build/bin/Release/file-organizer.exe --interactive
+```
 
 ## Project Structure
 
 ```
-FileOrganizer/
+file-organizer/
 ├── src/
-│   ├── main_simple_cli_with_undo.cpp     # Production CLI with undo
-│   ├── core/
-│   │   ├── File.h/.cpp                   # Base file class
-│   │   ├── FileHandler.h/.cpp            # Main file handling logic (Qt-based)
-│   │   ├── ImageFile.h/.cpp              # Image file specialization
-│   │   ├── AudioFile.h/.cpp              # Audio file specialization
-│   │   ├── VideoFile.h/.cpp              # Video file specialization
-│   │   └── DocumentFile.h/.cpp           # Document file specialization
-│   └── utils/
-│       ├── FileUtils.h/.cpp              # Utility functions
-├── build/
-│   └── FileOrganizerWithUndo.exe         # Production executable
-├── build.bat                             # Windows build script
-├── run.sh                                # Linux/Mac build script
-├── DOCUMENTATION.md                      # Technical documentation
-├── .gitignore                            # Git ignore file
-└── README.md                             # This file
+│   ├── main.cpp              # Application entry point
+│   ├── file_organizer.h      # Main organizer class
+│   ├── file_organizer.cpp    # Implementation
+│   └── utils.h               # Utility functions
+├── build/                    # Build output directory
+├── CMakeLists.txt           # CMake configuration
+├── build.bat               # Windows build script
+├── run.sh                  # Unix build script
+├── README.md               # This file
+└── LICENSE                 # License file
 ```
 
-## Advanced Features
+## Development
 
-### Undo Functionality
-
-The advanced CLI version includes comprehensive undo functionality:
-
-- **Session-based undo**: Each organization operation is tracked
-- **Selective undo**: Undo specific sessions by ID
-- **History viewing**: See all past organization operations
-- **Persistent logging**: Operations are saved to `.fileorganizer_log.txt`
-
-### Safety Features
-
-- **File integrity**: Moves files safely without data loss
-- **Error handling**: Robust error handling for edge cases
-- **Progress tracking**: Real-time progress updates during organization
-- **Dry-run mode**: Preview mode for listing files before organizing
-
-## Troubleshooting
-
-### Common Issues
-
-#### "No such file or directory" Error
+### Building from Source
 
 ```bash
-bash: ./build/FileOrganizerWithUndo.exe: No such file or directory
-```
-
-**Solution**: The executable hasn't been built yet. Run the build command first:
-
-```bash
-# Windows
-build.bat
-
-# Linux/Mac
-./run.sh
-
-# Or manual build
 mkdir build
-g++ -std=c++17 -static -o build/FileOrganizerWithUndo.exe src/main_simple_cli_with_undo.cpp
+cd build
+cmake ..
+make
 ```
 
-#### Linker Errors (ld returned 116 exit status)
-
-**Solution**: Use static linking:
+### Running Tests
 
 ```bash
-g++ -std=c++17 -static -o build/FileOrganizerWithUndo.exe src/main_simple_cli_with_undo.cpp
+# Run with test directory (Windows Git Bash/MSYS)
+./build/bin/Release/file-organizer.exe --list test_data/
 ```
-
-#### Path Issues on Windows
-
-- Use double quotes around paths with spaces: `"C:\Users\Your Name\Downloads"`
-- Use backslashes for Windows paths: `"C:\path\to\folder"`
-- For bash on Windows, use forward slashes: `"C:/path/to/folder"`
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a pull request or open an issue for any suggestions or improvements.
-
-### Development Guidelines
-
-- Follow C++17 standards
-- Use Object-Oriented Programming principles
-- Include proper error handling
-- Write clear, self-documenting code
-- Test both CLI versions before submitting
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See LICENSE file for details.
 
-## Changelog
+## Contributing
 
-### v1.0.0 (Production Release)
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
-- ✅ Production CLI version with undo functionality
-- ✅ Object-oriented file handling system
-- ✅ Cross-platform C++17 implementation
-- ✅ Comprehensive file type support (Documents, Images, Music, Videos, Others)
-- ✅ Session-based operation tracking and history
-- ✅ Interactive and command-line modes
-- ✅ Safe file operations with complete undo capability
-- ✅ Clean, optimized codebase ready for production deployment
+## Support
+
+For issues and questions, please create an issue on the GitHub repository.
+
+<!-- reference the DOCUMENTATION.md file -->
 
 ## Documentation
 
-For detailed technical documentation, including OOP principles implementation, architecture details, and code examples, see [DOCUMENTATION.md](DOCUMENTATION.md).
+For detailed documentation, please refer to the [DOCUMENTATION.md](DOCUMENTATION.md) file.
+This file contains comprehensive guides, examples, and API references to help you understand and use the File Organizer effectively.
