@@ -38,6 +38,12 @@ File Organizer scans a directory and automatically sorts files into predefined c
 
    ```bash
    git clone https://github.com/oladosuabayomi/FileOrganizer.git
+
+   ```
+
+   After cloning, navigate to the project directory:
+
+   ```bash
    cd FileOrganizer
    ```
 
@@ -66,24 +72,38 @@ File Organizer scans a directory and automatically sorts files into predefined c
 
 ```bash
 # Show help
-./build/FileOrganizer --help               # Linux/macOS
-./build/FileOrganizer.exe --help           # Windows
+./build/FileOrganizer --help         # Linux/macOS
 
+./build/FileOrganizer.exe --help    # Windows
+```
+
+```bash
 # Interactive mode (recommended for beginners)
 ./build/FileOrganizer --interactive
 
+```
+
+```bash
 # List files and their categories (preview mode)
 ./build/FileOrganizer --list "/path/to/folder"
+```
 
+```bash
 # Organize files
 ./build/FileOrganizer --organize "/path/to/folder"
+```
 
+```bash
 # Undo last organization
 ./build/FileOrganizer --undo "/path/to/folder"
+```
 
+```bash
 # Undo specific session
 ./build/FileOrganizer --undo "/path/to/folder" 20250711_143022
+```
 
+```bash
 # Show organization history
 ./build/FileOrganizer --history "/path/to/folder"
 ```
@@ -93,13 +113,20 @@ File Organizer scans a directory and automatically sorts files into predefined c
 ```bash
 # Organize Downloads folder
 ./build/FileOrganizer --organize ~/Downloads
+```
+
+```bash
 
 # Preview organization without moving files
 ./build/FileOrganizer --list ~/Downloads
+```
 
+```bash
 # Interactive mode for guided operation
 ./build/FileOrganizer --interactive
+```
 
+```bash
 # Undo the last organization in Downloads
 ./build/FileOrganizer --undo ~/Downloads
 ```
@@ -136,17 +163,22 @@ For advanced users who prefer manual compilation:
 ```bash
 # Create build directory
 mkdir -p build
+```
+
+```bash
 
 # Windows
 g++ -std=c++17 -static-libgcc -static-libstdc++ -o build/FileOrganizer.exe src/fileorganizer.cpp
+```
 
+```bash
 # Linux/macOS
 g++ -std=c++17 -static-libgcc -static-libstdc++ -O2 -Wall -Wextra -o build/FileOrganizer src/fileorganizer.cpp
 ```
 
 ## License
 
-This project is licensed under the MIT License. See LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contributing
 
