@@ -25,12 +25,7 @@ File Organizer scans a directory and automatically sorts files into predefined c
 | Audio     | `.mp3`, `.wav`, `.flac`, `.aac`, `.ogg`, `.wma`, `.m4a`, `.opus`                                 |
 | Others    | All other file types                                                                             |
 
-## Requirements
-
-- C++17 compatible compiler (GCC 7.0+, Clang 5.0+, MSVC 2017+)
-- CMake 3.12 or higher
-- Operating System: Windows 10+, Ubuntu 18.04+, macOS 10.14+
-
+## Build and Installation
 
 ### Prerequisites
 
@@ -48,153 +43,111 @@ File Organizer scans a directory and automatically sorts files into predefined c
 
 2. Build the project:
 
-   ```bash
-   # For Windows
-   ./build.bat
+   **Windows:**
+   ```cmd
+   build.bat
+   ```
 
-   # For Linux/Mac
+   **Linux/macOS:**
+   ```bash
    chmod +x run.sh
    ./run.sh
    ```
-
-   ```bash
-   mkdir build
-   cd build
-   g++ -std=c++17 -static -o FileOrganizer.exe ../src/fileorganizer.cpp
-   ```
-
-**Note**: If you encounter linker errors, use the static linking option (`-static` flag) which resolves dynamic library dependencies.
 
 ### Usage
 
 ```bash
 # Show help
-./build/FileOrganizer.exe --help
-```
+./build/FileOrganizer --help
 
-```bash
 # Interactive mode (recommended for beginners)
-./build/FileOrganizer.exe --interactive
-```
+./build/FileOrganizer --interactive
 
-```bash
 # List files and their categories (preview mode)
-./build/FileOrganizer.exe --list "C:\path\to\folder"
-```
+./build/FileOrganizer --list "C:\path\to\folder"
 
-```bash
 # Organize files
-./build/FileOrganizer.exe --organize "C:\path\to\folder"
-```
+./build/FileOrganizer --organize "C:\path\to\folder"
 
-```bash
 # Undo last organization
-./build/FileOrganizer.exe --undo "C:\path\to\folder"
-```
+./build/FileOrganizer --undo "C:\path\to\folder"
 
-```bash
 # Undo specific session
-./build/FileOrganizer.exe --undo "C:\path\to\folder" 20250711_143022
-```
+./build/FileOrganizer --undo "C:\path\to\folder" 20250711_143022
 
-```bash
 # Show organization history
-./build/FileOrganizer.exe --history "C:\path\to\folder"
+./build/FileOrganizer --history "C:\path\to\folder"
 ```
 
 
-**Windows:**
-
-```cmd
-build.bat
-```
-
-**Linux/macOS:**
-
-```bash
-chmod +x run.sh
-./run.sh
-```
-
-## Usage
-
-### Executable Locations
+## Command Line Interface
 
 After building, the executable will be located at:
-
-- **CMake build**: `./build/bin/Release/file-organizer.exe` (Windows) or `./build/bin/file-organizer` (Linux/macOS)
-- **Direct compilation**: `./build/file-organizer.exe` (Windows) or `./build/file-organizer` (Linux/macOS)
-
-**Note**: The `run.sh` script automatically detects your platform and shows the correct path after building.
-
-**Tip**: For easier usage, you can create an alias:
-
-```bash
-# For Windows (Git Bash/MSYS)
-alias file-organizer='./build/bin/Release/file-organizer.exe'
-
-# For Linux/macOS
-alias file-organizer='./build/bin/file-organizer'
-
-# Then use simply:
-file-organizer --help
-```
-
-### Command Line Interface
-
-```bash
-# Display help (Windows paths shown, adjust .exe for Linux/macOS)
-./build/bin/Release/file-organizer.exe --help   # CMake build
-# OR
-./build/file-organizer.exe --help               # Direct compilation
-
-# List files (preview mode)
-./build/bin/Release/file-organizer.exe --list /path/to/directory
-
-# Organize files
-./build/bin/Release/file-organizer.exe --organize /path/to/directory
-
-# Interactive mode
-./build/bin/Release/file-organizer.exe --interactive
-
-# Undo operations
-./build/bin/Release/file-organizer.exe --undo /path/to/directory
-./build/bin/Release/file-organizer.exe --undo /path/to/directory --session SESSION_ID
-
-# View history
-./build/bin/Release/file-organizer.exe --history /path/to/directory
-```
+- **Windows**: `./build/FileOrganizer.exe`
+- **Linux/macOS**: `./build/FileOrganizer`
 
 ### Examples
 
 ```bash
-# Organize Downloads folder (Windows Git Bash/MSYS)
-./build/bin/Release/file-organizer.exe --organize ~/Downloads
+# Organize Downloads folder (Windows)
+./build/FileOrganizer.exe --organize ~/Downloads
+
+# Organize Downloads folder (Linux/macOS)
+./build/FileOrganizer --organize ~/Downloads
 
 # Preview organization without moving files
-./build/bin/Release/file-organizer.exe --list ~/Downloads
+./build/FileOrganizer --list ~/Downloads
 
 # Interactive mode for guided operation
-./build/bin/Release/file-organizer.exe --interactive
+./build/FileOrganizer --interactive
 ```
 
 ## Project Structure
 
 ```
-file-organizer/
+FileOrganizer/
 ├── src/
+│   └── fileorganizer.cpp    # Main application source
+├── build/                   # Build output directory
+│   └── FileOrganizer(.exe)  # Compiled executable
+├── build.bat               # Windows build script
+├── run.sh                  # Linux/macOS build script
+├── README.md               # User documentation
+├── DOCUMENTATION.md        # Technical documentation
+├── LICENSE                 # MIT License
+└── .gitignore             # Git ignore rules
 ```
 
 ## Development
 
 ### Building from Source
 
-```bash
+The project uses a simple compilation approach without external dependencies:
+
+**Windows:**
+```cmd
+build.bat
 ```
 
-### Running Tests
+**Linux/macOS:**
+```bash
+chmod +x run.sh
+./run.sh
+```
+
+### Manual Compilation
+
+If you prefer to compile manually:
 
 ```bash
+# Create build directory
+mkdir -p build
+
+# Compile (Windows)
+g++ -std=c++17 -static-libgcc -static-libstdc++ -o build/FileOrganizer.exe src/fileorganizer.cpp
+
+# Compile (Linux/macOS)
+g++ -std=c++17 -static-libgcc -static-libstdc++ -O2 -Wall -Wextra -o build/FileOrganizer src/fileorganizer.cpp
 ```
 
 ## License
