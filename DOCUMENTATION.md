@@ -121,7 +121,7 @@ File Organizer is a modern C++17 command-line application that automatically cat
 
 **Conceptual Implementation**:
 
-**Location**: `src/main_simple_cli_with_undo.cpp`, lines 42-67
+**Location**: `src/fileorganizer.cpp`, lines 42-67
 
 ```cpp
 class SimpleFileOrganizer {
@@ -153,7 +153,7 @@ private:
 
 **Conceptual Implementation**:
 
-**Location**: `src/main_simple_cli_with_undo.cpp`, lines 268-271
+**Location**: `src/fileorganizer.cpp`, lines 268-271
 
 ```cpp
 ```
@@ -170,7 +170,7 @@ private:
 
 **Implementation in FileOrganizer**:
 
-**Location**: `src/main_simple_cli_with_undo.cpp`, lines 36-40
+**Location**: `src/fileorganizer.cpp`, lines 36-40
 
 ```cpp
 // Structure to track file movements for undo functionality
@@ -181,7 +181,7 @@ struct FileMove {
 };
 ```
 
-**Location**: `src/main_simple_cli_with_undo.cpp`, lines 102-108
+**Location**: `src/fileorganizer.cpp`, lines 102-108
 
 ```cpp
         int totalFiles = 0;
@@ -205,7 +205,7 @@ struct FileMove {
 
 **Implementation in FileOrganizer**:
 
-**Location**: `src/main_simple_cli_with_undo.cpp`, lines 69-95
+**Location**: `src/fileorganizer.cpp`, lines 69-95
 
 ```cpp
     void listFiles(const std::string& folderPath) {
@@ -232,7 +232,7 @@ struct FileMove {
     }
 ```
 
-**Location**: `src/main_simple_cli_with_undo.cpp`, lines 285-304
+**Location**: `src/fileorganizer.cpp`, lines 285-304
 
 ```cpp
     bool isValidFile(const fs::path& filePath, const std::string& basePath) {
@@ -264,7 +264,7 @@ struct FileMove {
 
 **Implementation in FileOrganizer**:
 
-**Location**: `src/main_simple_cli_with_undo.cpp`, lines 132-145
+**Location**: `src/fileorganizer.cpp`, lines 132-145
 
 ```cpp
                 try {
@@ -287,7 +287,7 @@ struct FileMove {
                 }
 ```
 
-**Location**: `src/main_simple_cli_with_undo.cpp`, lines 238-246
+**Location**: `src/fileorganizer.cpp`, lines 238-246
 
 ```cpp
             try {
@@ -445,11 +445,6 @@ SimpleFileOrganizer class
    # Create build directory
    mkdir build
 
-   # Compile with static linking (recommended)
-   g++ -std=c++17 -static -O2 -o build/file-organizer src/main.cpp src/file_organizer.cpp
-
-   # Or without static linking
-   g++ -std=c++17 -O2 -o build/file-organizer src/main.cpp src/file_organizer.cpp
    ```
 
 ### Build Notes
@@ -533,14 +528,6 @@ private:
 #### 1. Interactive Mode (Recommended for Beginners)
 
 ```bash
-# CMake build (Windows)
-./build/bin/Release/file-organizer.exe --interactive
-
-# Direct compilation (Windows)
-./build/file-organizer.exe --interactive
-
-# Linux/macOS - remove .exe extension
-./build/bin/file-organizer --interactive
 ```
 
 **Interactive Session Example:**
@@ -577,35 +564,26 @@ To undo this operation, use: --undo "/home/user/Downloads" 20250115_143022
 **List Files Before Organizing:**
 
 ```bash
-# CMake build (Windows)
-./build/bin/Release/file-organizer.exe --list "/home/user/Downloads"
-
-# Direct compilation (Windows)
-./build/file-organizer.exe --list "/home/user/Downloads"
 ```
 
 **Organize Files:**
 
 ```bash
-./build/bin/Release/file-organizer.exe --organize "/home/user/Downloads"
 ```
 
 **Undo Last Operation:**
 
 ```bash
-./build/bin/Release/file-organizer.exe --undo "/home/user/Downloads"
 ```
 
 **View Organization History:**
 
 ```bash
-./build/bin/Release/file-organizer.exe --history "/home/user/Downloads"
 ```
 
 **Undo Specific Session:**
 
 ```bash
-./build/bin/Release/file-organizer.exe --undo "/home/user/Downloads" 20250115_143022
 ```
 
 ### Understanding the Output
@@ -696,10 +674,6 @@ The application automatically categorizes files into these folders based on file
    - For automation, integrate into scripts:
      ```bash
      #!/bin/bash
-     # Organize multiple folders (Windows paths shown)
-     ./build/bin/Release/file-organizer.exe --organize "/home/user/Downloads"
-     ./build/bin/Release/file-organizer.exe --organize "/home/user/Desktop"
-     ./build/bin/Release/file-organizer.exe --organize "/home/user/Documents/Unsorted"
      ```
 
 ---
@@ -723,13 +697,13 @@ The file organization algorithm follows these steps:
 
 The current implementation uses a simple but effective map-based approach for file categorization:
 
-**Location**: `src/main_simple_cli_with_undo.cpp`, lines 268-271
+**Location**: `src/fileorganizer.cpp`, lines 268-271
 
 ```cpp
 }
 ```
 
-**Location**: `src/main_simple_cli_with_undo.cpp`, lines 118-127
+**Location**: `src/fileorganizer.cpp`, lines 118-127
 
 ```cpp
 // File processing loop showing how categorization is used
@@ -747,9 +721,6 @@ for (const auto& entry : fs::directory_iterator(folderPath)) {
 ### Session Management
 
 
-    std::stringstream ss;
-    ss << std::put_time(std::localtime(&time_t), "%Y%m%d_%H%M%S");
-    return ss.str();
 }
 
 
@@ -760,10 +731,6 @@ for (const auto& entry : fs::directory_iterator(folderPath)) {
 
 ### Error Handling
 
-The application implements comprehensive error handling:
-
-```cpp
-bool FileOrganizer::organize_directory(const std::string& directory_path) {
     try {
         // Validate directory
         if (!is_valid_directory(directory_path)) {

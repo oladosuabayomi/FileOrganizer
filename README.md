@@ -31,7 +31,6 @@ File Organizer scans a directory and automatically sorts files into predefined c
 - CMake 3.12 or higher
 - Operating System: Windows 10+, Ubuntu 18.04+, macOS 10.14+
 
-## Installation
 
 ### Prerequisites
 
@@ -52,13 +51,12 @@ File Organizer scans a directory and automatically sorts files into predefined c
    ```bash
    # For Windows
    ./build.bat
-   
+
    # For Linux/Mac
    chmod +x run.sh
    ./run.sh
    ```
 
-3. Manual compilation (recommended - static linking to avoid linker issues):
    ```bash
    mkdir build
    cd build
@@ -104,7 +102,6 @@ File Organizer scans a directory and automatically sorts files into predefined c
 ./build/FileOrganizer.exe --history "C:\path\to\folder"
 ```
 
-### Platform-Specific Instructions
 
 **Windows:**
 
@@ -193,17 +190,11 @@ file-organizer/
 ### Building from Source
 
 ```bash
-mkdir build
-cd build
-cmake ..
-make
 ```
 
 ### Running Tests
 
 ```bash
-# Run with test directory (Windows Git Bash/MSYS)
-./build/bin/Release/file-organizer.exe --list test_data/
 ```
 
 ## License
