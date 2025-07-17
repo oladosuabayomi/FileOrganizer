@@ -31,6 +31,7 @@
 #include <algorithm>
 #include <fstream>
 #include <ctime>
+#include <unordered_map>
 #include <iomanip>
 #include <sstream>
 
@@ -77,18 +78,37 @@ public:
 
         std::cout << "Files in " << folderPath << ":" << std::endl;
         std::cout << "----------------------------------------" << std::endl;
-
+        
+        // Use a vector to collect entries before processing (faster iteration)
+        std::vector<fs::directory_entry> entries;
         for (const auto& entry : fs::directory_iterator(folderPath)) {
             if (entry.is_regular_file()) {
-                std::string filename = entry.path().filename().string();
-                std::string extension = entry.path().extension().string();
-                std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
-                
-                std::string category = getCategory(extension);
-                auto fileSize = fs::file_size(entry.path());
-                
-                std::cout << "  " << filename << " -> " << category << " (" << formatFileSize(fileSize) << ")" << std::endl;
+                entries.push_back(entry);
             }
+        }
+        
+        // Cache extension mappings for this run
+        std::unordered_map<std::string, std::string> extensionCache;
+        
+        // Process files efficiently with minimal I/O operations
+        for (const auto& entry : entries) {
+            std::string filename = entry.path().filename().string();
+            std::string extension = entry.path().extension().string();
+            std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+            
+            // Use cached category if available
+            std::string category;
+            auto cacheIt = extensionCache.find(extension);
+            if (cacheIt != extensionCache.end()) {
+                category = cacheIt->second;
+            } else {
+                category = getCategory(extension);
+                extensionCache[extension] = category;  // Cache for future use
+            }
+            
+            auto fileSize = entry.file_size(); // More efficient than fs::file_size
+            
+            std::cout << "  " << filename << " -> " << category << " (" << formatFileSize(fileSize) << ")" << std::endl;
         }
     }
 
@@ -107,61 +127,70 @@ public:
         // Create category folders
         createCategoryFolders(folderPath);
         
-        int totalFiles = 0;
-        int processedFiles = 0;
         std::vector<FileMove> moves;
+        std::vector<fs::directory_entry> filesToProcess;
         
-        // Count total files first
+        // Single pass: collect all valid files
+        std::cout << "Scanning files..." << std::flush;
         for (const auto& entry : fs::directory_iterator(folderPath)) {
             if (entry.is_regular_file() && isValidFile(entry.path(), folderPath)) {
-                totalFiles++;
+                filesToProcess.push_back(entry);
             }
         }
         
-        std::cout << "Found " << totalFiles << " files to organize." << std::endl;
-        std::cout << "----------------------------------------" << std::endl;
+        int totalFiles = filesToProcess.size();
+        if (totalFiles == 0) {
+            std::cout << "\nNo files to organize." << std::endl;
+            return;
+        }
         
-        // Process files
-        for (const auto& entry : fs::directory_iterator(folderPath)) {
-            if (entry.is_regular_file() && isValidFile(entry.path(), folderPath)) {
-                std::string filename = entry.path().filename().string();
-                std::string extension = entry.path().extension().string();
-                std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+        std::cout << " Found " << totalFiles << " files to organize." << std::endl;
+        std::cout << "Processing files:" << std::endl;
+        
+        int processedFiles = 0;
+        int lastProgress = -1;
+        
+        // Process files efficiently
+        for (const auto& entry : filesToProcess) {
+            std::string filename = entry.path().filename().string();
+            std::string extension = entry.path().extension().string();
+            std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+            
+            std::string category = getCategory(extension);
+            std::string targetDir = folderPath + "/" + category;
+            std::string targetPath = targetDir + "/" + filename;
+            
+            // Handle file name conflicts
+            targetPath = getUniqueFilePath(targetPath);
+            
+            try {
+                // Record the move for undo functionality
+                FileMove move;
+                move.originalPath = entry.path().string();
+                move.newPath = targetPath;
+                move.timestamp = sessionId;
+                moves.push_back(move);
                 
-                std::string category = getCategory(extension);
-                std::string targetDir = folderPath + "/" + category;
-                std::string targetPath = targetDir + "/" + filename;
+                fs::rename(entry.path(), targetPath);
+                processedFiles++;
                 
-                // Handle file name conflicts
-                targetPath = getUniqueFilePath(targetPath);
-                
-                try {
-                    // Record the move for undo functionality
-                    FileMove move;
-                    move.originalPath = entry.path().string();
-                    move.newPath = targetPath;
-                    move.timestamp = sessionId;
-                    moves.push_back(move);
-                    
-                    fs::rename(entry.path(), targetPath);
-                    processedFiles++;
-                    std::cout << "✓ Moved: " << filename << " -> " << category << "/" << std::endl;
-                    
-                    // Show progress
-                    int percentage = (processedFiles * 100) / totalFiles;
+                // Show progress only at 10% intervals or every 100 files
+                int percentage = (processedFiles * 100) / totalFiles;
+                if (percentage != lastProgress && (percentage % 10 == 0 || processedFiles % 100 == 0 || processedFiles == totalFiles)) {
                     std::cout << "Progress: " << processedFiles << "/" << totalFiles << " (" << percentage << "%)" << std::endl;
-                } catch (const fs::filesystem_error& e) {
-                    std::cout << "❌ Error moving " << filename << ": " << e.what() << std::endl;
+                    lastProgress = percentage;
                 }
+                
+            } catch (const fs::filesystem_error& e) {
+                std::cout << "Error moving " << filename << ": " << e.what() << std::endl;
             }
         }
         
-        // Save move log for undo functionality
+        // Save move log for undo functionality (single write operation)
         saveUndoLog(folderPath, moves, sessionId);
         
-        std::cout << "----------------------------------------" << std::endl;
         std::cout << "File organization completed! Processed " << processedFiles << " files." << std::endl;
-        std::cout << "To undo this operation, use: --undo \"" << folderPath << "\" " << sessionId << std::endl;
+        std::cout << "To undo: --undo \"" << folderPath << "\" " << sessionId << std::endl;
     }
     
     void showUndoHistory(const std::string& folderPath) {
@@ -271,18 +300,38 @@ public:
 
 private:
     std::string getCategory(const std::string& extension) {
+        // Use static cache for repeated extension lookups
+        static std::unordered_map<std::string, std::string> categoryCache;
+        
+        // Check cache first for better performance
+        auto cacheIt = categoryCache.find(extension);
+        if (cacheIt != categoryCache.end()) {
+            return cacheIt->second;
+        }
+        
+        // Not in cache, look up in main map
         auto it = extensionCategories.find(extension);
-        return (it != extensionCategories.end()) ? it->second : "Others";
+        std::string category = (it != extensionCategories.end()) ? it->second : "Others";
+        
+        // Add to cache for future lookups
+        categoryCache[extension] = category;
+        
+        return category;
     }
     
     void createCategoryFolders(const std::string& basePath) {
-        std::vector<std::string> folders = {"Images", "Videos", "Music", "Documents", "Others"};
+        // Store created paths for faster lookup later
+        static std::vector<std::string> categoryFolders = {"Images", "Videos", "Music", "Documents", "Others"};
         
-        for (const std::string& folder : folders) {
-            std::string folderPath = basePath + "/" + folder;
+        // Create all category folders at once, avoiding string concatenation in loops
+        fs::path basePathObj(basePath);
+        for (const auto& folder : categoryFolders) {
+            fs::path folderPath = basePathObj / folder;
             try {
-                fs::create_directory(folderPath);
-            } catch (const fs::filesystem_error& e) {
+                if (!fs::exists(folderPath)) {
+                    fs::create_directory(folderPath);
+                }
+            } catch (const fs::filesystem_error&) {
                 // Folder might already exist, that's okay
             }
         }
@@ -307,23 +356,26 @@ private:
     
     std::string getUniqueFilePath(const std::string& originalPath) {
         if (!fs::exists(originalPath)) {
-            return originalPath;
+            return originalPath; // Fast path for most files
         }
         
+        // Use filesystem library for path manipulation (more efficient)
         fs::path path(originalPath);
+        fs::path directory = path.parent_path();
         std::string stem = path.stem().string();
         std::string extension = path.extension().string();
-        std::string directory = path.parent_path().string();
         
+        // Start with a reasonable counter to avoid too many checks for large duplicates
         int counter = 1;
-        std::string newPath;
+        fs::path newPath;
         
+        // Try to find a unique name with minimal filesystem checks
         do {
-            newPath = directory + "/" + stem + "_" + std::to_string(counter) + extension;
-            counter++;
-        } while (fs::exists(newPath));
+            // Use path concatenation instead of string concatenation
+            newPath = directory / (stem + "_" + std::to_string(counter++) + extension);
+        } while (fs::exists(newPath) && counter < 10000); // Avoid infinite loops
         
-        return newPath;
+        return newPath.string();
     }
     
     std::string getCurrentTimestamp() {
@@ -335,14 +387,24 @@ private:
     }
     
     void saveUndoLog(const std::string& folderPath, const std::vector<FileMove>& moves, const std::string& sessionId) {
-        std::string logFile = folderPath + "/.fileorganizer_log.txt";
-        std::ofstream file(logFile, std::ios::app);
-        
-        file << "SESSION:" << sessionId << std::endl;
-        for (const auto& move : moves) {
-            file << "MOVE:" << move.originalPath << "|" << move.newPath << std::endl;
+        if (moves.empty()) {
+            return; // No moves to log
         }
-        file << "END_SESSION:" << sessionId << std::endl;
+        
+        std::string logFile = folderPath + "/.fileorganizer_log.txt";
+        
+        // Pre-allocate a string buffer for better performance with many files
+        std::stringstream buffer;
+        buffer << "SESSION:" << sessionId << std::endl;
+        
+        for (const auto& move : moves) {
+            buffer << "MOVE:" << move.originalPath << "|" << move.newPath << std::endl;
+        }
+        buffer << "END_SESSION:" << sessionId << std::endl;
+        
+        // Single file write operation
+        std::ofstream file(logFile, std::ios::app);
+        file << buffer.str();
         file.close();
     }
     
