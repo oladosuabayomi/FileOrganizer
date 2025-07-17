@@ -35,64 +35,60 @@ File Organizer scans a directory and automatically sorts files into predefined c
 ### Installation
 
 1. Clone the repository:
-
    ```bash
    git clone https://github.com/oladosuabayomi/FileOrganizer.git
    cd FileOrganizer
    ```
 
 2. Build the project:
-
-   **Windows:**
+   
+   **Windows (Command Prompt):**
    ```cmd
    build.bat
    ```
-
-   **Linux/macOS:**
+   
+   **Linux/macOS/Windows (Git Bash):**
    ```bash
    chmod +x run.sh
    ./run.sh
    ```
 
-### Usage
+3. The executable will be created in the `build/` directory:
+   - **Windows**: `build/FileOrganizer.exe`
+   - **Linux/macOS**: `build/FileOrganizer`
+
+## Usage
+
+### Basic Commands
 
 ```bash
 # Show help
-./build/FileOrganizer --help
+./build/FileOrganizer --help               # Linux/macOS
+./build/FileOrganizer.exe --help           # Windows
 
 # Interactive mode (recommended for beginners)
 ./build/FileOrganizer --interactive
 
 # List files and their categories (preview mode)
-./build/FileOrganizer --list "C:\path\to\folder"
+./build/FileOrganizer --list "/path/to/folder"
 
 # Organize files
-./build/FileOrganizer --organize "C:\path\to\folder"
+./build/FileOrganizer --organize "/path/to/folder"
 
 # Undo last organization
-./build/FileOrganizer --undo "C:\path\to\folder"
+./build/FileOrganizer --undo "/path/to/folder"
 
 # Undo specific session
-./build/FileOrganizer --undo "C:\path\to\folder" 20250711_143022
+./build/FileOrganizer --undo "/path/to/folder" 20250711_143022
 
 # Show organization history
-./build/FileOrganizer --history "C:\path\to\folder"
+./build/FileOrganizer --history "/path/to/folder"
 ```
-
-
-## Command Line Interface
-
-After building, the executable will be located at:
-- **Windows**: `./build/FileOrganizer.exe`
-- **Linux/macOS**: `./build/FileOrganizer`
 
 ### Examples
 
 ```bash
-# Organize Downloads folder (Windows)
-./build/FileOrganizer.exe --organize ~/Downloads
-
-# Organize Downloads folder (Linux/macOS)
+# Organize Downloads folder
 ./build/FileOrganizer --organize ~/Downloads
 
 # Preview organization without moving files
@@ -100,6 +96,9 @@ After building, the executable will be located at:
 
 # Interactive mode for guided operation
 ./build/FileOrganizer --interactive
+
+# Undo the last organization in Downloads
+./build/FileOrganizer --undo ~/Downloads
 ```
 
 ## Project Structure
@@ -122,31 +121,23 @@ FileOrganizer/
 
 ### Building from Source
 
-The project uses a simple compilation approach without external dependencies:
+Use the provided build scripts for your platform:
 
-**Windows:**
-```cmd
-build.bat
-```
-
-**Linux/macOS:**
-```bash
-chmod +x run.sh
-./run.sh
-```
+- **Windows**: `build.bat`
+- **Linux/macOS/Git Bash**: `./run.sh`
 
 ### Manual Compilation
 
-If you prefer to compile manually:
+For advanced users who prefer manual compilation:
 
 ```bash
 # Create build directory
 mkdir -p build
 
-# Compile (Windows)
+# Windows
 g++ -std=c++17 -static-libgcc -static-libstdc++ -o build/FileOrganizer.exe src/fileorganizer.cpp
 
-# Compile (Linux/macOS)
+# Linux/macOS
 g++ -std=c++17 -static-libgcc -static-libstdc++ -O2 -Wall -Wextra -o build/FileOrganizer src/fileorganizer.cpp
 ```
 

@@ -8,17 +8,25 @@ mkdir -p build
 
 # Compile the production version
 echo "Compiling FileOrganizer..."
-g++ -std=c++17 -static-libgcc -static-libstdc++ -O2 -Wall -Wextra -o build/FileOrganizer src/fileorganizer.cpp
+
+# Detect platform and set appropriate executable name
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" || "$OSTYPE" == "cygwin" ]]; then
+    EXECUTABLE="build/FileOrganizer.exe"
+else
+    EXECUTABLE="build/FileOrganizer"
+fi
+
+g++ -std=c++17 -static-libgcc -static-libstdc++ -O2 -Wall -Wextra -o "$EXECUTABLE" src/fileorganizer.cpp
 
 # Check if compilation was successful
 if [ $? -eq 0 ]; then
     echo
     echo "✓ Build successful!"
-    echo "✓ Executable: build/FileOrganizer"
+    echo "✓ Executable: $EXECUTABLE"
     echo
     echo "Usage:"
-    echo "  ./build/FileOrganizer --help"
-    echo "  ./build/FileOrganizer --interactive"
+    echo "  ./$EXECUTABLE --help"
+    echo "  ./$EXECUTABLE --interactive"
 else
     echo
     echo "✗ Build failed!"

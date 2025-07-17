@@ -289,6 +289,7 @@ private:
     }
     
     bool isValidFile(const fs::path& filePath, const std::string& basePath) {
+        (void)basePath; // Mark as intentionally unused
         std::string filename = filePath.filename().string();
         std::string parentDir = filePath.parent_path().filename().string();
         
@@ -409,26 +410,75 @@ private:
 };
 
 void showHelp() {
-    std::cout << "FileOrganizer CLI - Simple File Organizer with Undo" << std::endl;
-    std::cout << "====================================================" << std::endl;
-    std::cout << "Usage:" << std::endl;
-    std::cout << "  FileOrganizerSimple.exe [option] [folder_path] [session_id]" << std::endl;
+    std::cout << "FileOrganizer v1.0 - Professional File Organization Tool" << std::endl;
+    std::cout << "========================================================" << std::endl;
     std::cout << std::endl;
-    std::cout << "Options:" << std::endl;
+    std::cout << "DESCRIPTION:" << std::endl;
+    std::cout << "  Automatically organizes files into categorized subdirectories based on file extensions." << std::endl;
+    std::cout << "  Features complete undo functionality with session tracking for safe file operations." << std::endl;
+    std::cout << std::endl;
+    std::cout << "USAGE:" << std::endl;
+    std::cout << "  FileOrganizer [OPTION] <folder_path> [session_id]" << std::endl;
+    std::cout << std::endl;
+    std::cout << "OPTIONS:" << std::endl;
     std::cout << "  --organize <folder>         Organize files in the specified folder" << std::endl;
-    std::cout << "  --list <folder>             List files and their categories" << std::endl;
-    std::cout << "  --undo <folder> [session]   Undo organization (optionally specify session)" << std::endl;
-    std::cout << "  --history <folder>          Show organization history" << std::endl;
-    std::cout << "  --interactive               Run in interactive mode" << std::endl;
-    std::cout << "  --help                      Show this help message" << std::endl;
+    std::cout << "                              Creates subdirectories: Documents/, Images/, Videos/, Audio/, Others/" << std::endl;
     std::cout << std::endl;
-    std::cout << "Examples:" << std::endl;
-    std::cout << "  FileOrganizerSimple.exe --organize \"C:\\Users\\hp\\Downloads\"" << std::endl;
-    std::cout << "  FileOrganizerSimple.exe --list \"C:\\Users\\hp\\Downloads\"" << std::endl;
-    std::cout << "  FileOrganizerSimple.exe --undo \"C:\\Users\\hp\\Downloads\"" << std::endl;
-    std::cout << "  FileOrganizerSimple.exe --undo \"C:\\Users\\hp\\Downloads\" 20250711_143022" << std::endl;
-    std::cout << "  FileOrganizerSimple.exe --history \"C:\\Users\\hp\\Downloads\"" << std::endl;
-    std::cout << "  FileOrganizerSimple.exe --interactive" << std::endl;
+    std::cout << "  --list <folder>             Preview organization without moving files" << std::endl;
+    std::cout << "                              Shows which files will go into which categories" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  --undo <folder> [session]   Restore files to their original locations" << std::endl;
+    std::cout << "                              If session ID provided, undo specific session only" << std::endl;
+    std::cout << "                              If no session ID, undo the most recent organization" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  --history <folder>          Show all organization sessions for the folder" << std::endl;
+    std::cout << "                              Displays session IDs, timestamps, and file counts" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  --interactive               Launch guided interactive mode" << std::endl;
+    std::cout << "                              Recommended for first-time users" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  --help                      Show this comprehensive help message" << std::endl;
+    std::cout << std::endl;
+    std::cout << "SUPPORTED FILE TYPES:" << std::endl;
+    std::cout << "  Documents: .pdf .doc .docx .txt .rtf .odt .xls .xlsx .ppt .pptx .csv .md" << std::endl;
+    std::cout << "  Images:    .jpg .jpeg .png .gif .bmp .tiff .svg .webp .ico" << std::endl;
+    std::cout << "  Videos:    .mp4 .avi .mkv .mov .wmv .flv .webm .m4v .3gp" << std::endl;
+    std::cout << "  Audio:     .mp3 .wav .flac .aac .ogg .wma .m4a .opus" << std::endl;
+    std::cout << "  Others:    All other file types (preserves original extensions)" << std::endl;
+    std::cout << std::endl;
+    std::cout << "EXAMPLES:" << std::endl;
+    std::cout << "  # Preview what will be organized (safe, no files moved)" << std::endl;
+    std::cout << "  FileOrganizer --list \"C:\\Users\\hp\\Downloads\"" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  # Organize files (creates folders and moves files)" << std::endl;
+    std::cout << "  FileOrganizer --organize \"C:\\Users\\hp\\Downloads\"" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  # Interactive mode for guided operation" << std::endl;
+    std::cout << "  FileOrganizer --interactive" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  # Undo the most recent organization" << std::endl;
+    std::cout << "  FileOrganizer --undo \"C:\\Users\\hp\\Downloads\"" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  # Undo a specific session (use --history to find session IDs)" << std::endl;
+    std::cout << "  FileOrganizer --undo \"C:\\Users\\hp\\Downloads\" 20250717_143022" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  # View organization history" << std::endl;
+    std::cout << "  FileOrganizer --history \"C:\\Users\\hp\\Downloads\"" << std::endl;
+    std::cout << std::endl;
+    std::cout << "SAFETY FEATURES:" << std::endl;
+    std::cout << "  * All file operations are logged with timestamps" << std::endl;
+    std::cout << "  * Complete undo functionality - no permanent data loss" << std::endl;
+    std::cout << "  * Preview mode to see changes before applying them" << std::endl;
+    std::cout << "  * Session tracking allows selective undo operations" << std::endl;
+    std::cout << "  * Existing organized folders are preserved and updated" << std::endl;
+    std::cout << std::endl;
+    std::cout << "WORKFLOW:" << std::endl;
+    std::cout << "  1. Use --list to preview organization" << std::endl;
+    std::cout << "  2. Use --organize to apply changes" << std::endl;
+    std::cout << "  3. Use --history to view past operations" << std::endl;
+    std::cout << "  4. Use --undo if you need to revert changes" << std::endl;
+    std::cout << std::endl;
+    std::cout << "For more information, visit: https://github.com/oladosuabayomi/FileOrganizer" << std::endl;
 }
 
 void interactiveMode() {
