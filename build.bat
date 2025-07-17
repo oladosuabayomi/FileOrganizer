@@ -1,33 +1,32 @@
 @echo off
-setlocal
-
-echo File Organizer Build System
-echo ==========================
+echo Building FileOrganizer...
 echo.
 
-:: Check for CMake
-cmake --version >nul 2>&1
-if %errorlevel% neq 0 (
-    echo CMake not found. Trying direct compilation...
-    goto direct_build
+REM Create build directory if it doesn't exist
+if not exist build mkdir build
+
+REM Compile with static linking to avoid dynamic library issues
+echo Compiling FileOrganizer...
+g++ -std=c++17 -static-libgcc -static-libstdc++ -o build/FileOrganizer.exe src/fileorganizer.cpp
+
+REM Check if compilation was successful
+if %errorlevel% equ 0 (
+    echo.
+    echo ✓ Build successful!
+    echo ✓ Executable: build/FileOrganizer.exe
+    echo.
+    echo Usage:
+    echo   build\FileOrganizer.exe --help
+    echo   build\FileOrganizer.exe --interactive
+) else (
+    echo.
+    echo ✗ Build failed!
+    echo Make sure you have g++ with C++17 support installed.
+    echo You can install it via MinGW-w64 or MSYS2.
 )
 
-:: CMake build
-echo Using CMake build system...
-if not exist build mkdir build
-cd build
-
-echo Configuring...
-cmake .. -DCMAKE_BUILD_TYPE=Release
-if %errorlevel% neq 0 goto cmake_error
-
-echo Building...
-cmake --build . --config Release
-if %errorlevel% neq 0 goto cmake_error
-
 echo.
-echo Build successful!
-echo Executable: build\bin\file-organizer.exe
+pause
 echo.
 echo To run: build\bin\file-organizer.exe --help
 goto end
@@ -40,16 +39,6 @@ cd ..
 echo Direct compilation...
 if not exist build mkdir build
 
-echo Checking compiler...
-g++ --version >nul 2>&1
-if %errorlevel% neq 0 (
-    echo Error: g++ compiler not found
-    echo Please install MinGW-w64 or Visual Studio
-    goto error
-)
-
-echo Compiling...
-g++ -std=c++17 -Wall -O2 -o build/file-organizer.exe src/main.cpp src/file_organizer.cpp
 
 if %errorlevel% equ 0 (
     echo.

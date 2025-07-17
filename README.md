@@ -33,20 +33,75 @@ File Organizer scans a directory and automatically sorts files into predefined c
 
 ## Installation
 
-### Quick Build
+### Prerequisites
+
+- C++ compiler with C++17 support (g++, clang++, MSVC)
+- Windows, Linux, or macOS
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/oladosuabayomi/FileOrganizer.git
+   cd FileOrganizer
+   ```
+
+2. Build the project:
+
+   ```bash
+   # For Windows
+   ./build.bat
+   
+   # For Linux/Mac
+   chmod +x run.sh
+   ./run.sh
+   ```
+
+3. Manual compilation (recommended - static linking to avoid linker issues):
+   ```bash
+   mkdir build
+   cd build
+   g++ -std=c++17 -static -o FileOrganizer.exe ../src/fileorganizer.cpp
+   ```
+
+**Note**: If you encounter linker errors, use the static linking option (`-static` flag) which resolves dynamic library dependencies.
+
+### Usage
 
 ```bash
-# Clone repository
-git clone https://github.com/username/file-organizer.git
-cd file-organizer
+# Show help
+./build/FileOrganizer.exe --help
+```
 
-# Build using CMake
-mkdir build && cd build
-cmake ..
-make
+```bash
+# Interactive mode (recommended for beginners)
+./build/FileOrganizer.exe --interactive
+```
 
-# Alternative: Direct compilation
-g++ -std=c++17 -O2 -o build/file-organizer src/main.cpp src/file_organizer.cpp
+```bash
+# List files and their categories (preview mode)
+./build/FileOrganizer.exe --list "C:\path\to\folder"
+```
+
+```bash
+# Organize files
+./build/FileOrganizer.exe --organize "C:\path\to\folder"
+```
+
+```bash
+# Undo last organization
+./build/FileOrganizer.exe --undo "C:\path\to\folder"
+```
+
+```bash
+# Undo specific session
+./build/FileOrganizer.exe --undo "C:\path\to\folder" 20250711_143022
+```
+
+```bash
+# Show organization history
+./build/FileOrganizer.exe --history "C:\path\to\folder"
 ```
 
 ### Platform-Specific Instructions
@@ -131,16 +186,6 @@ file-organizer --help
 ```
 file-organizer/
 ├── src/
-│   ├── main.cpp              # Application entry point
-│   ├── file_organizer.h      # Main organizer class
-│   ├── file_organizer.cpp    # Implementation
-│   └── utils.h               # Utility functions
-├── build/                    # Build output directory
-├── CMakeLists.txt           # CMake configuration
-├── build.bat               # Windows build script
-├── run.sh                  # Unix build script
-├── README.md               # This file
-└── LICENSE                 # License file
 ```
 
 ## Development

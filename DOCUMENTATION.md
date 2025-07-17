@@ -116,283 +116,200 @@ File Organizer is a modern C++17 command-line application that automatically cat
 
 ## Architecture and Design
 
-### Production Architecture (v1.0.0)
-
-The File Organizer follows a clean, modern C++17 architecture emphasizing simplicity and maintainability:
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    User Interface                        │
-│                                                         │
-│  ┌─────────────────┐    ┌─────────────────────────────┐ │
-│  │ Interactive CLI │    │   Command-Line Interface    │ │
-│  │    (main.cpp)   │    │       (main.cpp)           │ │
-│  └─────────────────┘    └─────────────────────────────┘ │
-└─────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────┐
-│                Core Business Logic                       │
-│                                                         │
-│  ┌──────────────────────────────────────────────────┐  │
-│  │            FileOrganizer Class                   │  │
-│  │         (file_organizer.h/.cpp)                 │  │
-│  │                                                  │  │
-│  │  • list_files()                                 │  │
-│  │  • organize_directory()                         │  │
-│  │  • undo_organization()                          │  │
-│  │  • show_history()                               │  │
-│  │  • Session management                           │  │
-│  │  • Category mapping                             │  │
-│  │  • Error handling & logging                     │  │
-│  └──────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────┐
-│                C++17 Standard Library                   │
-│                                                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │
-│  │ std::        │  │ std::        │  │ std::        │ │
-│  │ filesystem   │  │ fstream      │  │ string       │ │
-│  └──────────────┘  └──────────────┘  └──────────────┘ │
-│                                                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │
-│  │ std::vector  │  │ std::map     │  │ std::chrono  │ │
-│  └──────────────┘  └──────────────┘  └──────────────┘ │
-└─────────────────────────────────────────────────────────┘
-```
-
-### Project Structure
-
-```
-file-organizer/
-├── src/
-│   ├── main.cpp              # Application entry point and CLI
-│   ├── file_organizer.h      # FileOrganizer class declaration
-│   └── file_organizer.cpp    # FileOrganizer class implementation
-├── build/                    # Build output directory
-├── CMakeLists.txt           # CMake build configuration
-├── build.bat               # Windows build script
-├── run.sh                  # Unix/Linux build script
-├── README.md               # User documentation
-├── DOCUMENTATION.md        # Technical documentation (this file)
-├── LICENSE                 # MIT license
-└── .gitignore             # Git ignore rules
-```
-
-### Core Design Principles
-
-The current architecture follows these key principles:
-
-1. **Single Responsibility**: Each component has one clear purpose
-2. **Simplicity**: Minimal complexity while maintaining functionality
-3. **Maintainability**: Easy to understand, modify, and extend
-4. **Cross-platform**: Uses standard C++17 features only
-5. **Zero Dependencies**: No external libraries required
-
-### Object-Oriented Programming Principles
-
-While the current production version uses a simplified single-class architecture for maintainability, FileOrganizer demonstrates how Object-Oriented Programming principles can be applied to file management systems. Here are conceptual examples showing how the four core OOP principles could be implemented:
-
-#### 1. Abstraction
-
-**Definition**: Hiding complex implementation details while exposing only essential features.
-
-**Conceptual Implementation for File Types**:
-
-```cpp
-// Abstract base class for file operations
-class File {
-public:
-    virtual ~File() = default;
-    virtual std::string getCategory() const = 0;  // Pure virtual function
-    virtual bool isValidType(const std::string& extension) const = 0;
-
-    // Common interface for all file types
-    std::string getFilePath() const { return filePath; }
-    std::string getFileName() const { return fileName; }
-    size_t getFileSize() const { return fileSize; }
-
-protected:
-    std::string filePath;
-    std::string fileName;
-    size_t fileSize;
-};
-```
-
-**Benefits**:
-
-- Users interact with files through a simple, consistent interface
-- Complex file type detection logic is hidden
-- Easy to work with different file types uniformly
-
-#### 2. Encapsulation
 
 **Definition**: Bundling data and methods together while controlling access to internal state.
 
 **Conceptual Implementation**:
 
+**Location**: `src/main_simple_cli_with_undo.cpp`, lines 42-67
+
 ```cpp
-// ImageFile.cpp - Data and methods encapsulated
-class ImageFile : public File {
+class SimpleFileOrganizer {
 private:
     // Private data members - controlled access
-    static const std::vector<std::string> validExtensions;
-    std::string resolution;
-    std::string colorDepth;
-
-public:
-    // Public interface controls access to data
-    std::string getCategory() const override { return "Images"; }
-
-    bool isValidType(const std::string& extension) const override {
-        return std::find(validExtensions.begin(), validExtensions.end(),
-                        extension) != validExtensions.end();
-    }
-
-    // Controlled access to internal data
-    std::string getResolution() const { return resolution; }
-    void setResolution(const std::string& res) { resolution = res; }
 
 private:
-    // Private helper methods
-    void detectImageProperties();
-    bool validateImageFile();
+    // Private helper methods - implementation details hidden
+    std::string getCategory(const std::string& extension);
+    void createCategoryFolders(const std::string& basePath);
+    bool isValidFile(const fs::path& filePath, const std::string& basePath);
+    std::string getUniqueFilePath(const std::string& originalPath);
+    std::string getCurrentTimestamp();
+    void saveUndoLog(const std::string& folderPath, const std::vector<FileMove>& moves, const std::string& sessionId);
+    void removeEmptyCategories(const std::string& basePath);
+    void removeSessionFromLog(const std::string& folderPath, const std::string& sessionId);
+    std::string formatFileSize(std::uintmax_t size);
 };
 ```
 
 **Benefits**:
 
-- Internal file properties are protected from direct manipulation
-- Data validation is enforced through controlled methods
-- Class maintains its own invariants
+- File category mappings are protected from external modification
+- Internal helper methods are hidden from public interface
+- Class maintains control over its internal state
 
-#### 3. Inheritance
 
-**Definition**: Creating new classes based on existing classes, inheriting properties and methods.
+**Definition**: Hiding complex implementation details while exposing only essential features.
 
 **Conceptual Implementation**:
 
+**Location**: `src/main_simple_cli_with_undo.cpp`, lines 268-271
+
 ```cpp
-// Base class
-class File {
-    // Common functionality for all files
-};
-
-// Derived classes inherit from File
-class DocumentFile : public File {
-public:
-    std::string getCategory() const override { return "Documents"; }
-    bool isValidType(const std::string& extension) const override {
-        static const std::vector<std::string> docExtensions =
-            {"pdf", "doc", "docx", "txt", "rtf", "odt"};
-        return std::find(docExtensions.begin(), docExtensions.end(),
-                        extension) != docExtensions.end();
-    }
-};
-
-class AudioFile : public File {
-public:
-    std::string getCategory() const override { return "Audio"; }
-    bool isValidType(const std::string& extension) const override {
-        static const std::vector<std::string> audioExtensions =
-            {"mp3", "wav", "flac", "aac", "ogg", "m4a"};
-        return std::find(audioExtensions.begin(), audioExtensions.end(),
-                        extension) != audioExtensions.end();
-    }
-};
-
-class VideoFile : public File {
-public:
-    std::string getCategory() const override { return "Videos"; }
-    bool isValidType(const std::string& extension) const override {
-        static const std::vector<std::string> videoExtensions =
-            {"mp4", "avi", "mkv", "mov", "wmv", "flv"};
-        return std::find(videoExtensions.begin(), videoExtensions.end(),
-                        extension) != videoExtensions.end();
-    }
-};
-
-class ImageFile : public File {
-public:
-    std::string getCategory() const override { return "Images"; }
-    bool isValidType(const std::string& extension) const override {
-        static const std::vector<std::string> imageExtensions =
-            {"jpg", "jpeg", "png", "gif", "bmp", "tiff", "svg"};
-        return std::find(imageExtensions.begin(), imageExtensions.end(),
-                        extension) != imageExtensions.end();
-    }
-};
 ```
 
 **Benefits**:
 
-- Code reuse: Common file operations defined once in base class
-- Consistent interface: All file types share the same basic structure
-- Easy extension: New file types can be added by inheriting from File
+- Users interact with simple methods like `organizeFolder()` without knowing the complex file system operations
+- Complex file categorization logic is hidden behind a simple `getCategory()` method
+- Error handling and edge cases are abstracted away from the public interface
 
-#### 4. Polymorphism
+### 3. Data Structures and Organization
 
-**Definition**: Objects of different types can be treated uniformly through a common interface.
+**Definition**: Using appropriate data structures to organize and manage information effectively.
 
-**Conceptual Implementation**:
+**Implementation in FileOrganizer**:
+
+**Location**: `src/main_simple_cli_with_undo.cpp`, lines 36-40
 
 ```cpp
-// FileHandler.cpp - Polymorphism in action
-class FileHandler {
-public:
-    void organizeFolder(const std::string& folderPath) {
-        std::filesystem::directory_iterator dirIter(folderPath);
+// Structure to track file movements for undo functionality
+struct FileMove {
+    std::string originalPath;
+    std::string newPath;
+    std::string timestamp;
+};
+```
 
-        for (const auto& entry : dirIter) {
+**Location**: `src/main_simple_cli_with_undo.cpp`, lines 102-108
+
+```cpp
+        int totalFiles = 0;
+        int processedFiles = 0;
+        std::vector<FileMove> moves;
+
+        // Count total files first
+        for (const auto& entry : fs::directory_iterator(folderPath)) {
+            if (entry.is_regular_file() && isValidFile(entry.path(), folderPath)) {
+```
+
+**Benefits**:
+
+- Clear data structure (`FileMove`) represents file operations
+- Vector container efficiently manages multiple file operations
+- Structured approach to tracking undo information
+
+### 4. Method Organization and Responsibility
+
+**Definition**: Each method has a single, well-defined responsibility.
+
+**Implementation in FileOrganizer**:
+
+**Location**: `src/main_simple_cli_with_undo.cpp`, lines 69-95
+
+```cpp
+    void listFiles(const std::string& folderPath) {
+        if (!fs::exists(folderPath) || !fs::is_directory(folderPath)) {
+            std::cout << "Error: Folder does not exist: " << folderPath << std::endl;
+            return;
+        }
+
+        std::cout << "Files in " << folderPath << ":" << std::endl;
+        std::cout << "----------------------------------------" << std::endl;
+
+        for (const auto& entry : fs::directory_iterator(folderPath)) {
             if (entry.is_regular_file()) {
-                // Create appropriate file object based on extension
-                std::unique_ptr<File> file = createFileObject(entry);
+                std::string filename = entry.path().filename().string();
+                std::string extension = entry.path().extension().string();
+                std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 
-                if (file) {
-                    // Polymorphic call - different behavior for each file type
-                    std::string category = file->getCategory();  // Calls appropriate override
-                    std::string ext = entry.path().extension().string();
-                    bool isValid = file->isValidType(ext);  // Polymorphic
+                std::string category = getCategory(extension);
+                auto fileSize = fs::file_size(entry.path());
 
-                    if (isValid) {
-                        moveFileToCategory(file.get(), category);
-                    }
-                }
+                std::cout << "  " << filename << " -> " << category << " (" << formatFileSize(fileSize) << ")" << std::endl;
             }
         }
     }
+```
 
-private:
-    std::unique_ptr<File> createFileObject(const std::filesystem::directory_entry& entry) {
-        std::string extension = entry.path().extension().string();
-        std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+**Location**: `src/main_simple_cli_with_undo.cpp`, lines 285-304
 
-        // Factory pattern using polymorphism
-        if (ImageFile().isValidType(extension)) {
-            return std::make_unique<ImageFile>();
-        }
-        else if (AudioFile().isValidType(extension)) {
-            return std::make_unique<AudioFile>();
-        }
-        else if (VideoFile().isValidType(extension)) {
-            return std::make_unique<VideoFile>();
-        }
-        else if (DocumentFile().isValidType(extension)) {
-            return std::make_unique<DocumentFile>();
+```cpp
+    bool isValidFile(const fs::path& filePath, const std::string& basePath) {
+        std::string filename = filePath.filename().string();
+        std::string parentDir = filePath.parent_path().filename().string();
+
+        // Skip hidden files, log files, and files already in category folders
+        if (filename[0] == '.' ||
+            filename == ".fileorganizer_log.txt" ||
+            parentDir == "Images" || parentDir == "Videos" ||
+            parentDir == "Music" || parentDir == "Documents" ||
+            parentDir == "Others") {
+            return false;
         }
 
-        return nullptr;  // Unknown file type
+        return true;
     }
-};
 ```
 
 **Benefits**:
 
-- Single code path handles all file types uniformly
-- Easy to add new file types without modifying existing code
-- Runtime behavior determined by actual object type
+- `listFiles()` method has single responsibility: display file categorization preview
+- `isValidFile()` method has single responsibility: determine if a file should be processed
+- Each method is focused and easy to understand/maintain
+
+### 5. Error Handling and Robustness
+
+**Definition**: Implementing comprehensive error handling to make the system robust.
+
+**Implementation in FileOrganizer**:
+
+**Location**: `src/main_simple_cli_with_undo.cpp`, lines 132-145
+
+```cpp
+                try {
+                    // Record the move for undo functionality
+                    FileMove move;
+                    move.originalPath = entry.path().string();
+                    move.newPath = targetPath;
+                    move.timestamp = sessionId;
+                    moves.push_back(move);
+
+                    fs::rename(entry.path(), targetPath);
+                    processedFiles++;
+                    std::cout << "✓ Moved: " << filename << " -> " << category << "/" << std::endl;
+
+                    // Show progress
+                    int percentage = (processedFiles * 100) / totalFiles;
+                    std::cout << "Progress: " << processedFiles << "/" << totalFiles << " (" << percentage << "%)" << std::endl;
+                } catch (const fs::filesystem_error& e) {
+                    std::cout << "❌ Error moving " << filename << ": " << e.what() << std::endl;
+                }
+```
+
+**Location**: `src/main_simple_cli_with_undo.cpp`, lines 238-246
+
+```cpp
+            try {
+                if (fs::exists(move.newPath)) {
+                    fs::rename(move.newPath, move.originalPath);
+                    undoCount++;
+                    std::cout << "✓ Restored: " << fs::path(move.originalPath).filename().string() << std::endl;
+                } else {
+                    std::cout << "⚠ File not found: " << fs::path(move.newPath).filename().string() << std::endl;
+                }
+            } catch (const fs::filesystem_error& e) {
+                std::cout << "❌ Error restoring " << fs::path(move.originalPath).filename().string() << ": " << e.what() << std::endl;
+            }
+```
+
+**Benefits**:
+
+- Comprehensive try-catch blocks handle file system errors gracefully
+- User-friendly error messages with clear indicators (✓, ❌, ⚠)
+- Operations continue even if individual files fail
+
+This simplified but effective OOP approach demonstrates that good design doesn't always require complex inheritance hierarchies. The single-class design with proper encapsulation, abstraction, and method organization provides a maintainable and extensible solution.
 
 ### Alternative OOP Architecture
 
@@ -404,6 +321,7 @@ If implementing a full OOP design, the system architecture could look like:
 │                                                         │
 │  ┌─────────────────┐    ┌─────────────────────────────┐ │
 │  │ Interactive CLI │    │   Command-Line Interface    │ │
+│  │  (main function)│    │     (main function)         │ │
 │  └─────────────────┘    └─────────────────────────────┘ │
 └─────────────────────────────────────────────────────────┘
                               │
@@ -412,37 +330,34 @@ If implementing a full OOP design, the system architecture could look like:
 │                 Core Application Logic                  │
 │                                                         │
 │  ┌──────────────────────────────────────────────────┐  │
-│  │              FileHandler                          │  │
-│  │  • Organization Logic                            │  │
+│  │           SimpleFileOrganizer Class              │  │
+│  │  • File Organization Logic                       │  │
 │  │  • Undo Management                               │  │
 │  │  • Session Tracking                              │  │
+│  │  • Category Management                           │  │
 │  └──────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────┐
-│                  File Type System                       │
+│                  Data Structures                        │
 │                                                         │
-│     ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐ │
-│     │  File   │  │Document │  │ Image   │  │ Audio   │ │
-│     │ (Base)  │  │  File   │  │  File   │  │  File   │ │
-│     └─────────┘  └─────────┘  └─────────┘  └─────────┘ │
-│                                                         │
-│                    ┌─────────┐                         │
-│                    │ Video   │                         │
-│                    │  File   │                         │
-│                    └─────────┘                         │
+│     ┌─────────────────┐    ┌─────────────────────────┐  │
+│     │    FileMove     │    │  extensionCategories   │  │
+│     │   Structure     │    │        Map              │  │
+│     │ (Undo tracking) │    │   (File categorization) │  │
+│     └─────────────────┘    └─────────────────────────┘  │
 └─────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────┐
-│                   Utility Layer                         │
+│                 File System Layer                       │
 │                                                         │
 │  ┌──────────────────────────────────────────────────┐  │
-│  │                FileUtils                         │  │
-│  │  • File System Operations                       │  │
+│  │         C++17 Filesystem API                    │  │
+│  │  • Directory Operations                         │  │
+│  │  • File Movement                                │  │
 │  │  • Path Validation                              │  │
-│  │  • Size Formatting                              │  │
 │  └──────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────┘
 ```
@@ -450,25 +365,32 @@ If implementing a full OOP design, the system architecture could look like:
 ### Class Relationships (OOP Design)
 
 ```cpp
-// Class hierarchy showing OOP relationships
-File (Abstract Base Class)
-├── DocumentFile (Concrete Implementation)
-├── ImageFile (Concrete Implementation)
-├── AudioFile (Concrete Implementation)
-└── VideoFile (Concrete Implementation)
+// Actual project structure (single-file architecture)
+main() function
+├── Creates SimpleFileOrganizer instance
+├── Parses command-line arguments
+├── Calls appropriate methods based on user input
+└── Handles interactive mode
 
-FileHandler (Composition)
-├── Uses File objects polymorphically
-├── Manages file operations
-└── Tracks undo sessions
+SimpleFileOrganizer class
+├── Contains extensionCategories map (private member)
+├── Manages FileMove vector for undo operations
+├── Provides public interface methods:
+│   ├── listFiles()
+│   ├── organizeFolder()
+│   ├── undoOrganization()
+│   └── showUndoHistory()
+└── Contains private helper methods:
+    ├── getCategory()
+    ├── createCategoryFolders()
+    ├── isValidFile()
+    ├── getUniqueFilePath()
+    ├── getCurrentTimestamp()
+    ├── saveUndoLog()
+    ├── removeEmptyCategories()
+    ├── removeSessionFromLog()
+    └── formatFileSize()
 
-FileOrganizer (Main Application)
-├── Contains FileHandler (Composition)
-├── Manages user interface
-└── Coordinates application flow
-```
-
-**Note**: The current production version prioritizes simplicity and maintainability with a single `FileOrganizer` class that handles all functionality directly. The OOP examples above demonstrate how the system could be designed using classical object-oriented patterns for educational purposes or future extensibility requirements.
 
 ---
 
@@ -496,7 +418,7 @@ FileOrganizer (Main Application)
    **Windows:**
 
    ```bash
-   build.bat
+   ./build.bat
    ```
 
    **Linux/Mac:**
@@ -799,73 +721,42 @@ The file organization algorithm follows these steps:
 
 ### File Detection Algorithm
 
+The current implementation uses a simple but effective map-based approach for file categorization:
+
+**Location**: `src/main_simple_cli_with_undo.cpp`, lines 268-271
+
 ```cpp
-std::string FileOrganizer::get_file_category(const std::string& extension) {
-    // Convert to lowercase for case-insensitive comparison
-    std::string ext = extension;
-    std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-
-    // Remove leading dot if present
-    if (!ext.empty() && ext[0] == '.') {
-        ext = ext.substr(1);
-    }
-
-    // Category mapping
-    static const std::map<std::string, std::vector<std::string>> categories = {
-        {"Documents", {"pdf", "doc", "docx", "txt", "rtf", "odt", "xls", "xlsx", "ppt", "pptx"}},
-        {"Images", {"jpg", "jpeg", "png", "gif", "bmp", "tiff", "svg", "webp"}},
-        {"Audio", {"mp3", "wav", "flac", "aac", "ogg", "m4a", "wma"}},
-        {"Videos", {"mp4", "avi", "mkv", "mov", "wmv", "flv", "webm", "m4v"}}
-    };
-
-    // Search for extension in categories
-    for (const auto& [category, extensions] : categories) {
-        if (std::find(extensions.begin(), extensions.end(), ext) != extensions.end()) {
-            return category;
-        }
-    }
-
-    return "Others";  // Default category for unknown extensions
 }
+```
+
+**Location**: `src/main_simple_cli_with_undo.cpp`, lines 118-127
+
+```cpp
+// File processing loop showing how categorization is used
+for (const auto& entry : fs::directory_iterator(folderPath)) {
+    if (entry.is_regular_file() && isValidFile(entry.path(), folderPath)) {
+        std::string filename = entry.path().filename().string();
+        std::string extension = entry.path().extension().string();
+        std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+
+        std::string category = getCategory(extension);
+        std::string targetDir = folderPath + "/" + category;
+        std::string targetPath = targetDir + "/" + filename;
 ```
 
 ### Session Management
 
-The application uses a robust session management system to track file operations:
-
-```cpp
-std::string FileOrganizer::generate_session_id() {
-    auto now = std::chrono::system_clock::now();
-    auto time_t = std::chrono::system_clock::to_time_t(now);
 
     std::stringstream ss;
     ss << std::put_time(std::localtime(&time_t), "%Y%m%d_%H%M%S");
     return ss.str();
 }
 
-bool FileOrganizer::log_file_move(const std::string& session_id,
-                                  const std::string& from,
-                                  const std::string& to) {
-    // Create log file path
-    std::string log_path = std::filesystem::path(from).parent_path() / ".file_organizer_log.txt";
-
-    std::ofstream log_file(log_path, std::ios::app);
-    if (!log_file.is_open()) {
-        return false;
-    }
 
     // Log entry format: timestamp|session_id|operation|from_path|to_path
     auto now = std::chrono::system_clock::now();
     auto time_t = std::chrono::system_clock::to_time_t(now);
 
-    log_file << std::put_time(std::localtime(&time_t), "%Y-%m-%d %H:%M:%S")
-             << "|" << session_id
-             << "|MOVE|" << from
-             << "|" << to << std::endl;
-
-    return true;
-}
-```
 
 ### Error Handling
 
@@ -907,7 +798,7 @@ bool FileOrganizer::organize_directory(const std::string& directory_path) {
         return false;
     }
 }
-```
+````
 
 ---
 
