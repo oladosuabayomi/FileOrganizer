@@ -35,19 +35,22 @@ File Organizer scans a directory and automatically sorts files into predefined c
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/oladosuabayomi/FileOrganizer.git
    cd FileOrganizer
    ```
 
 2. Build the project:
-   
+
    **Windows (Command Prompt):**
+
    ```cmd
    build.bat
    ```
-   
+
    **Linux/macOS/Windows (Git Bash):**
+
    ```bash
    chmod +x run.sh
    ./run.sh
