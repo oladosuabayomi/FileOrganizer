@@ -52,7 +52,7 @@ File Organizer scans a directory and automatically sorts files into predefined c
    **Windows (Command Prompt):**
 
    ```cmd
-   build.bat
+   ./build.bat
    ```
 
    **Linux/macOS/Windows (Git Bash):**
@@ -67,6 +67,35 @@ File Organizer scans a directory and automatically sorts files into predefined c
    - **Linux/macOS**: `build/FileOrganizer`
 
 ## Usage
+
+### 🌐 Web Interface (Recommended)
+
+For the easiest experience, use the modern web interface:
+
+**Windows:**
+
+```cmd
+launch-web.bat
+```
+
+**Linux/macOS:**
+
+```bash
+cd web
+./start.sh
+```
+
+The web interface provides:
+
+- Beautiful, modern UI that works on all devices
+- Real-time progress tracking and visual feedback
+- File preview before organization
+- Organization history and selective undo
+- No command-line knowledge required
+
+Visit `http://localhost:3000` after starting the server.
+
+### 💻 Command Line Interface
 
 ### Basic Commands
 
@@ -133,18 +162,27 @@ File Organizer scans a directory and automatically sorts files into predefined c
 
 ## Project Structure
 
-```
+```text
 FileOrganizer/
 ├── src/
-│   └── fileorganizer.cpp    # Main application source
-├── build/                   # Build output directory
-│   └── FileOrganizer(.exe)  # Compiled executable
-├── build.bat               # Windows build script
-├── run.sh                  # Linux/macOS build script
-├── README.md               # User documentation
-├── DOCUMENTATION.md        # Technical documentation
-├── LICENSE                 # MIT License
-└── .gitignore             # Git ignore rules
+│   └── fileorganizer.cpp      # Main application source
+├── web/                       # Web interface files
+│   ├── index.html            # Web UI main page
+│   ├── styles.css            # Modern CSS styling
+│   ├── app.js               # Frontend JavaScript
+│   ├── server.js            # Node.js backend server
+│   ├── start.bat            # Windows web server launcher
+│   ├── start.sh             # Linux/macOS web server launcher
+│   └── README.md            # Web interface documentation
+├── build/                     # Build output directory
+│   └── FileOrganizer(.exe)   # Compiled executable
+├── build.bat                 # Windows build script
+├── run.sh                    # Linux/macOS build script
+├── launch-web.bat            # Easy web interface launcher (Windows)
+├── README.md                 # Main documentation (this file)
+├── DOCUMENTATION.md          # Technical documentation
+├── LICENSE                   # MIT License
+└── .gitignore               # Git ignore rules
 ```
 
 ## Development

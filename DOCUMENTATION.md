@@ -1,20 +1,21 @@
 # File Organizer - Technical Documentation
 
-**Version 1.0.0 - Production Release**
+Version 1.0.0 - Production Release
 
 ## Table of Contents
 
 1. [Problem Statement](#problem-statement)
 2. [Project Overview](#project-overview)
 3. [Benefits of the Solution](#benefits-of-the-solution)
-4. [Architecture and Design](#architecture-and-design)
-5. [Build System](#build-system)
-6. [API Documentation](#api-documentation)
-7. [Usage Examples](#usage-examples)
-8. [Technical Implementation](#technical-implementation)
-9. [Extension and Customization](#extension-and-customization)
-10. [Command-Line Reference](#command-line-reference)
-11. [Troubleshooting](#troubleshooting)
+4. [Web Interface](#web-interface)
+5. [Architecture and Design](#architecture-and-design)
+6. [Build System](#build-system)
+7. [API Documentation](#api-documentation)
+8. [Usage Examples](#usage-examples)
+9. [Technical Implementation](#technical-implementation)
+10. [Extension and Customization](#extension-and-customization)
+11. [Command-Line Reference](#command-line-reference)
+12. [Command-Line Troubleshooting](#command-line-troubleshooting)
 
 ---
 
@@ -47,12 +48,13 @@ File Organizer is a modern C++17 command-line application that automatically cat
 
 ### Key Features
 
+- **Modern web interface** with responsive design and real-time progress tracking
 - **Automatic file categorization** into predefined categories (Documents, Images, Music, Videos, Others)
-- **Complete undo functionality** with detailed session tracking
-- **Interactive and command-line modes** for different user preferences
+- **Complete undo functionality** with detailed session tracking and selective restoration
+- **Multiple interface options**: Web UI, interactive CLI, and command-line modes
 - **Safe file operations** with comprehensive error handling and logging
-- **Cross-platform compatibility** using C++17 filesystem API
-- **Zero external dependencies** - pure standard library implementation
+- **Cross-platform compatibility** using C++17 filesystem API and Node.js
+- **Zero external dependencies** for C++ core, web interface uses built-in Node.js modules
 - **Professional command-line interface** with standard Unix-style arguments
 - **Session-based operation tracking** for granular undo control
 - **Optimized performance** with caching and efficient file operations
@@ -114,6 +116,301 @@ File Organizer is a modern C++17 command-line application that automatically cat
    - Clear feedback and progress indicators
    - Comprehensive help and documentation
    - Detailed operation logging for transparency
+
+---
+
+## Web Interface
+
+### Overview
+
+File Organizer includes a modern, responsive web interface that provides an intuitive alternative to the command-line interface. Built with standard web technologies (HTML5, CSS3, JavaScript, and Node.js), the web interface offers all the functionality of the command-line tool with enhanced user experience.
+
+### Features
+
+#### 🌟 User Interface Features
+
+- **Modern Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
+- **Real-time Progress Tracking**: Visual progress bars and live status updates during operations
+- **File Preview**: See exactly what files will be organized before making changes
+- **Interactive File Lists**: Click-to-select files and folders with visual feedback
+- **Drag-and-Drop Support**: Intuitive file and folder selection (where supported by browser)
+- **Dark/Light Theme**: Automatic theme detection with manual override options
+
+#### 📁 File Management Features
+
+- **Quick Folder Access**: One-click access to common directories:
+  - Downloads folder
+  - Desktop
+  - Documents
+  - Pictures
+  - Custom folder selection
+- **File Type Filtering**: Filter and preview files by category before organization
+- **Batch Operations**: Select multiple files/folders for simultaneous processing
+- **Safe Mode Preview**: Test organization logic without moving files
+
+#### 🔄 History and Undo Features
+
+- **Complete Organization History**: View all past organization sessions with timestamps
+- **Session Details**: See exactly what files were moved in each session
+- **Selective Undo**: Choose specific sessions to undo from an interactive list
+- **Multi-session Undo**: Undo multiple sessions at once
+- **Undo Confirmation**: Clear confirmation dialogs to prevent accidental reversals
+
+#### ⚡ Performance Features
+
+- **Asynchronous Operations**: Non-blocking file operations with progress feedback
+- **Incremental Loading**: Handle large directories without freezing the interface
+- **Background Processing**: Long-running operations continue in background
+- **Status Persistence**: Operations continue even if browser window is refreshed
+
+### Architecture
+
+#### Frontend Stack
+
+```text
+┌─────────────────────────────────────────┐
+│              Web Browser                │
+├─────────────────────────────────────────┤
+│  HTML5 + CSS3 + Vanilla JavaScript     │
+├─────────────────────────────────────────┤
+│           AJAX/Fetch API                │
+├─────────────────────────────────────────┤
+│         REST API Endpoints              │
+└─────────────────────────────────────────┘
+```
+
+#### Backend Stack
+
+```text
+┌─────────────────────────────────────────┐
+│           Node.js Server                │
+├─────────────────────────────────────────┤
+│        Express.js Framework            │
+├─────────────────────────────────────────┤
+│       C++ Binary Integration           │
+├─────────────────────────────────────────┤
+│      Filesystem Operations API         │
+└─────────────────────────────────────────┘
+```
+
+### Getting Started
+
+#### Prerequisites
+
+- **Node.js**: Version 12.0 or higher (built-in modules only, no external dependencies)
+- **Modern Web Browser**: Chrome 70+, Firefox 65+, Safari 12+, Edge 79+
+- **File Organizer C++ Binary**: Must be built and available in `build/` directory
+
+#### Installation and Setup
+
+**Quick Start (Windows):**
+
+```cmd
+launch-web.bat
+```
+
+**Manual Start (All Platforms):**
+
+```bash
+# Navigate to web directory
+cd web
+
+# Start the server (Windows)
+start.bat
+
+# Start the server (Linux/macOS)
+./start.sh
+```
+
+**Custom Configuration:**
+
+```bash
+# Start on custom port
+node server.js --port 8080
+
+# Enable debug mode
+node server.js --debug
+
+# Specify custom C++ binary path
+node server.js --binary "../custom/path/FileOrganizer.exe"
+```
+
+#### Access the Interface
+
+Once the server is running:
+
+1. Open your web browser
+2. Navigate to `http://localhost:3000` (or your custom port)
+3. The interface will automatically load and detect your system
+
+### API Endpoints
+
+The web interface communicates with the backend through RESTful API endpoints:
+
+#### File Operations
+
+```javascript
+// Get file list for a directory
+GET /api/files?path=/path/to/directory
+
+// Preview organization (without moving files)
+POST /api/preview
+Content-Type: application/json
+{
+  "path": "/path/to/directory"
+}
+
+// Execute organization
+POST /api/organize
+Content-Type: application/json
+{
+  "path": "/path/to/directory"
+}
+```
+
+#### History Operations
+
+```javascript
+// Get organization history
+GET /api/history?path=/path/to/directory
+
+// Undo specific session
+POST /api/undo
+Content-Type: application/json
+{
+  "path": "/path/to/directory",
+  "sessionId": "20250717_143022"
+}
+
+// Undo last organization
+POST /api/undo-last
+Content-Type: application/json
+{
+  "path": "/path/to/directory"
+}
+```
+
+#### System Operations
+
+```javascript
+// Get system information
+GET / api / system - info;
+
+// Check server health
+GET / api / health;
+
+// Get supported file types
+GET / api / file - types;
+```
+
+### File Structure
+
+```text
+web/
+├── index.html              # Main interface HTML
+├── styles.css              # Modern CSS with animations
+├── app.js                  # Frontend JavaScript logic
+├── server.js               # Node.js backend server
+├── start.bat               # Windows startup script
+├── start.sh                # Linux/macOS startup script
+└── README.md               # Web interface documentation
+```
+
+### Configuration Options
+
+#### Server Configuration
+
+The web server supports several configuration options through environment variables or command-line arguments:
+
+```javascript
+// Default configuration
+const config = {
+  port: process.env.PORT || 3000,
+  host: process.env.HOST || "localhost",
+  binaryPath: process.env.BINARY_PATH || "../build/FileOrganizer",
+  maxFileSize: process.env.MAX_FILE_SIZE || "100MB",
+  timeout: process.env.TIMEOUT || 30000,
+  debugMode: process.env.DEBUG === "true",
+};
+```
+
+#### Client Configuration
+
+```javascript
+// Frontend configuration (in app.js)
+const CLIENT_CONFIG = {
+  apiBaseUrl: window.location.origin + "/api",
+  pollInterval: 1000, // Status polling interval (ms)
+  maxRetries: 3, // Max API retry attempts
+  timeout: 30000, // Request timeout (ms)
+  animationDuration: 300, // UI animation duration (ms)
+};
+```
+
+### Security Considerations
+
+#### Path Validation
+
+- All file paths are validated and sanitized
+- Directory traversal attacks are prevented
+- Only accessible directories can be organized
+
+#### File Operation Security
+
+- Read-only preview mode available
+- Confirmation required for destructive operations
+- Comprehensive logging of all file movements
+- Automatic backup creation before organization
+
+#### Network Security
+
+- Server binds to localhost only by default
+- No authentication required for local access
+- HTTPS support available for production deployments
+- CORS headers configured for same-origin policy
+
+### Troubleshooting
+
+#### Common Issues
+
+**Server Won't Start:**
+
+1. Check if Node.js is installed: `node --version`
+2. Verify port 3000 is available: `netstat -an | findstr :3000`
+3. Ensure C++ binary exists: `ls build/FileOrganizer*`
+
+**Interface Not Loading:**
+
+1. Check browser console for JavaScript errors
+2. Verify server is running: `curl http://localhost:3000/api/health`
+3. Clear browser cache and reload
+
+**File Operations Failing:**
+
+1. Check file permissions in target directories
+2. Verify sufficient disk space
+3. Ensure C++ binary has execution permissions
+
+#### Debug Mode
+
+Enable debug mode for detailed logging:
+
+```bash
+# Enable debug logging
+node server.js --debug
+
+# View debug logs in browser console
+# Press F12 → Console tab
+```
+
+#### Performance Optimization
+
+For large directories (1000+ files):
+
+1. Use preview mode first to verify organization
+2. Enable incremental loading in browser settings
+3. Consider organizing in smaller batches
+4. Monitor system resources during operations
 
 ---
 
@@ -346,7 +643,7 @@ This simplified but effective OOP approach demonstrates that good design doesn't
 
 If implementing a full OOP design, the system architecture could look like:
 
-```
+```text
 ┌─────────────────────────────────────────────────────────┐
 │                    User Interface                        │
 │                                                         │
@@ -440,7 +737,7 @@ SimpleFileOrganizer class
    ```bash
    git clone https://github.com/your-username/FileOrganizer.git
    cd FileOrganizer
-````
+   ```
 
 2. **Build Options**
 
@@ -692,13 +989,174 @@ The application automatically categorizes files into these folders based on file
    - Test undo functionality on non-critical data first
 
 4. **Batch Processing**
+
    - For automation, integrate into scripts:
+
      ```cmd
      @echo off
      echo Organizing Downloads folder...
      build\FileOrganizer.exe --organize "C:\Users\%USERNAME%\Downloads"
      echo Done!
      ```
+
+### 3. Web Interface Mode (Recommended for Most Users)
+
+The web interface provides the most user-friendly experience with visual feedback and point-and-click operation.
+
+#### Starting the Web Interface
+
+**Quick Start (Windows):**
+
+```cmd
+launch-web.bat
+```
+
+**Manual Start:**
+
+```cmd
+cd web
+start.bat
+```
+
+#### Web Interface Workflow
+
+##### Step 1: Access the Interface
+
+1. Open your web browser
+2. Navigate to `http://localhost:3000`
+3. The interface loads with a clean, modern design
+
+##### Step 2: Select Directory
+
+- **Quick Folders**: Click on predefined buttons for common directories:
+  - Downloads
+  - Desktop
+  - Documents
+  - Pictures
+- **Custom Path**: Type or paste any directory path
+- **Browse**: Use the folder selection dialog (where supported)
+
+##### Step 3: Preview Organization
+
+- Click "Preview Organization" to see what changes will be made
+- Review the file categorization in an interactive list
+- Files are grouped by destination category
+- Each file shows size and current location
+
+##### Step 4: Execute Organization
+
+- Click "Organize Files" after reviewing the preview
+- Watch real-time progress with animated progress bars
+- See detailed status messages as files are processed
+- Get immediate confirmation when organization completes
+
+##### Step 5: Manage History
+
+- Click "Undo Last" to access the undo interface
+- Select from a list of recent organization sessions
+- Each session shows timestamp and number of files moved
+- Choose specific sessions to undo with confirmation dialogs
+
+#### Example Web Workflow
+
+**Organizing Downloads Folder:**
+
+1. **Initial State**: Downloads folder contains mixed files
+2. **Access Interface**: Open `http://localhost:3000`
+3. **Select Downloads**: Click the "Downloads" quick folder button
+4. **Preview**: Click "Preview Organization"
+   - Interface shows: "25 files will be organized"
+   - Categories preview:
+     - Documents: 8 files (PDF, DOCX, TXT)
+     - Images: 12 files (JPG, PNG, GIF)
+     - Videos: 3 files (MP4, AVI)
+     - Music: 2 files (MP3, FLAC)
+5. **Execute**: Click "Organize Files"
+   - Progress bar shows real-time completion
+   - Status updates: "Processing file 15 of 25..."
+   - Completion: "Organization complete! 25 files organized."
+6. **Verify**: Browse the Downloads folder to see organized subdirectories
+
+**Undoing Organization:**
+
+1. **Access Undo**: Click "Undo Last" button
+2. **Select Session**: Choose from list:
+   - `20250717_143022` - 25 files moved
+   - `20250716_092015` - 12 files moved
+   - `20250715_160430` - 8 files moved
+3. **Confirm Undo**: Select desired session and click "Undo Selected"
+4. **Progress**: Watch progress bar as files are restored
+5. **Complete**: "Undo complete! 25 files restored."
+
+#### Web Interface Features in Action
+
+**Real-time Progress Tracking:**
+
+```text
+╭─────────────────────────────────────────╮
+│ Organizing Files...                     │
+│ ████████████████████░░░  83% (20/24)   │
+│ Processing: vacation_photo.jpg          │
+│ Status: Moving to Images folder         │
+╰─────────────────────────────────────────╯
+```
+
+**Interactive File Preview:**
+
+```text
+Documents (8 files)
+├── 📄 report.pdf (2.1 MB)
+├── 📄 invoice.docx (145 KB)
+└── 📄 notes.txt (12 KB)
+
+Images (12 files)
+├── 🖼️ vacation_001.jpg (3.2 MB)
+├── 🖼️ vacation_002.jpg (2.8 MB)
+└── 🖼️ screenshot.png (892 KB)
+```
+
+**Organization History:**
+
+```text
+Recent Organization Sessions:
+┌─────────────────────────────────────────┐
+│ ⭐ 20250717_143022 (2 hours ago)       │
+│    25 files moved • Downloads          │
+├─────────────────────────────────────────┤
+│   20250716_092015 (Yesterday)          │
+│    12 files moved • Desktop            │
+├─────────────────────────────────────────┤
+│   20250715_160430 (2 days ago)         │
+│    8 files moved • Downloads           │
+└─────────────────────────────────────────┘
+```
+
+#### Advanced Web Features
+
+**Bulk Operations:**
+
+- Select multiple directories for batch organization
+- Queue multiple operations with progress tracking
+- Cancel long-running operations if needed
+
+**Smart Categorization:**
+
+- Visual preview of file movements before execution
+- Custom category rules (when available)
+- Conflict resolution for duplicate filenames
+
+**Responsive Design:**
+
+- Works on desktop, tablet, and mobile devices
+- Touch-friendly interface for mobile users
+- Adaptive layout based on screen size
+
+**Accessibility Features:**
+
+- Keyboard navigation support
+- Screen reader compatibility
+- High contrast mode support
+- Clear focus indicators
 
 ---
 
@@ -989,7 +1447,7 @@ build\FileOrganizer.exe --organize "C:\Users\%USERNAME%\Downloads"
 
 ### Available Commands
 
-```
+```text
 FileOrganizer.exe [COMMAND] [OPTIONS]
 
 Commands:
@@ -1012,9 +1470,9 @@ Examples:
 
 ---
 
-## Troubleshooting
+## Command-Line Troubleshooting
 
-### Common Issues
+### Build and Installation Issues
 
 1. **"g++ not found" during build**
 
@@ -1045,3 +1503,4 @@ Examples:
 - Progress is shown at 10% intervals during processing
 - Use `--list` first to preview organization before running `--organize`
 - Log files are automatically created and managed - no user intervention needed
+````
