@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FileOrganizer - Web Interface</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div class="header-content">
+          <h1>📁 FileOrganizer</h1>
+          <p>
+            Organize your files automatically with a beautiful web interface
+          </p>
+        </div>
+      </header>
+
+      <main class="main">
+        <!-- Folder Selection Section -->
+        <section class="card">
+          <h2>📂 Select Folder</h2>
+          <div class="folder-input-group">
+            <input
+              type="text"
+              id="folderPath"
+              placeholder="Enter folder path (e.g., C:\Users\hp\Downloads)"
+              class="folder-input"
+            />
+            <button onclick="browseFolder()" class="btn btn-secondary">
+              Browse
+            </button>
+          </div>
+          <div class="quick-folders">
+            <span>Quick Access:</span>
+            <button onclick="setQuickFolder('Downloads')" class="quick-btn">
+              Downloads
+            </button>
+            <button onclick="setQuickFolder('Desktop')" class="quick-btn">
+              Desktop
+            </button>
+            <button onclick="setQuickFolder('Documents')" class="quick-btn">
+              Documents
+            </button>
+          </div>
+        </section>
+
+        <!-- Action Buttons -->
+        <section class="card actions-section">
+          <h2>🚀 Actions</h2>
+          <div class="action-buttons">
+            <button onclick="previewFiles()" class="btn btn-primary">
+              <span>👁️</span> Preview Files
+            </button>
+            <button onclick="organizeFiles()" class="btn btn-success">
+              <span>📋</span> Organize Files
+            </button>
+            <button onclick="showHistory()" class="btn btn-info">
+              <span>📊</span> History
+            </button>
+            <button onclick="undoOrganization()" class="btn btn-warning">
+              <span>↩️</span> Undo Last
+            </button>
+          </div>
+        </section>
+
+        <!-- Results Section -->
+        <section
+          class="card results-section"
+          id="resultsSection"
+          style="display: none"
+        >
+          <div class="results-header">
+            <h2 id="resultsTitle">📋 Results</h2>
+            <button onclick="clearResults()" class="btn btn-outline">
+              Clear
+            </button>
+          </div>
+          <div id="resultsContent" class="results-content"></div>
+        </section>
+
+        <!-- Progress Section -->
+        <section
+          class="card progress-section"
+          id="progressSection"
+          style="display: none"
+        >
+          <h2>⏳ Progress</h2>
+          <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
+          </div>
+          <div id="progressText" class="progress-text">Starting...</div>
+        </section>
+
+        <!-- History Modal -->
+        <div id="historyModal" class="modal" style="display: none">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3>📊 Organization History</h3>
+              <button onclick="closeModal()" class="close-btn">&times;</button>
+            </div>
+            <div id="historyContent" class="modal-body">Loading history...</div>
+            <div class="modal-footer">
+              <button onclick="closeModal()" class="btn btn-secondary">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Undo Modal -->
+        <div id="undoModal" class="modal" style="display: none">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3>↩️ Undo Organization</h3>
+              <button onclick="closeUndoModal()" class="close-btn">
+                &times;
+              </button>
+            </div>
+            <div class="modal-body">
+              <div id="undoOptions">
+                <p>Select which session to undo:</p>
+                <div id="sessionsList"></div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button onclick="closeUndoModal()" class="btn btn-secondary">
+                Cancel
+              </button>
+              <button onclick="executeUndo()" class="btn btn-warning">
+                Undo Selected
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <div id="statusText">Ready</div>
+        <div class="status-indicator" id="statusIndicator"></div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
