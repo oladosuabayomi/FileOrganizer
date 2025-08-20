@@ -127,7 +127,7 @@ File Organizer includes a modern, responsive web interface that provides an intu
 
 ### Features
 
-#### 🌟 User Interface Features
+#### User Interface Features
 
 - **Modern Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
 - **Real-time Progress Tracking**: Visual progress bars and live status updates during operations
@@ -136,7 +136,7 @@ File Organizer includes a modern, responsive web interface that provides an intu
 - **Drag-and-Drop Support**: Intuitive file and folder selection (where supported by browser)
 - **Dark/Light Theme**: Automatic theme detection with manual override options
 
-#### 📁 File Management Features
+#### File Management Features
 
 - **Quick Folder Access**: One-click access to common directories:
   - Downloads folder
@@ -148,7 +148,7 @@ File Organizer includes a modern, responsive web interface that provides an intu
 - **Batch Operations**: Select multiple files/folders for simultaneous processing
 - **Safe Mode Preview**: Test organization logic without moving files
 
-#### 🔄 History and Undo Features
+#### History and Undo Features
 
 - **Complete Organization History**: View all past organization sessions with timestamps
 - **Session Details**: See exactly what files were moved in each session
@@ -156,7 +156,7 @@ File Organizer includes a modern, responsive web interface that provides an intu
 - **Multi-session Undo**: Undo multiple sessions at once
 - **Undo Confirmation**: Clear confirmation dialogs to prevent accidental reversals
 
-#### ⚡ Performance Features
+#### Performance Features
 
 - **Asynchronous Operations**: Non-blocking file operations with progress feedback
 - **Incremental Loading**: Handle large directories without freezing the interface
@@ -719,7 +719,7 @@ SimpleFileOrganizer class
     ├── removeSessionFromLog()
     └── formatFileSize()
 
-
+``````
 ---
 
 ## Build System
@@ -1336,7 +1336,7 @@ for (const auto& move : movesToUndo) {
                  << ": " << e.what() << std::endl;
     }
 }
-```
+``````
 
 ---
 
@@ -1374,7 +1374,7 @@ std::map<std::string, std::string> extensionCategories = {
     {".zip", "Archives"}, {".rar", "Archives"}, {".7z", "Archives"},
     {".cpp", "Code"}, {".h", "Code"}, {".py", "Code"}, {".js", "Code"}
 };
-```
+``````
 
 ### Custom Organization Rules
 
@@ -1410,7 +1410,7 @@ std::string getCategory(const std::string& extension) {
 
     return category;
 }
-```
+````````
 
 ### Integration with Build Systems
 
@@ -1439,7 +1439,7 @@ echo "File organization complete!"
 ```cmd
 REM Add to Windows Task Scheduler or cron job
 build\FileOrganizer.exe --organize "C:\Users\%USERNAME%\Downloads"
-```
+```````
 
 ---
 
@@ -1466,7 +1466,7 @@ Examples:
   FileOrganizer.exe --undo "C:\Users\hp\Downloads"
   FileOrganizer.exe --undo "C:\Users\hp\Downloads" 20250117_143022
   FileOrganizer.exe --history "C:\Users\hp\Downloads"
-```
+```````
 
 ---
 
@@ -1503,4 +1503,4 @@ Examples:
 - Progress is shown at 10% intervals during processing
 - Use `--list` first to preview organization before running `--organize`
 - Log files are automatically created and managed - no user intervention needed
-````
+

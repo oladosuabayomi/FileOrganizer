@@ -2,7 +2,7 @@
 
 A beautiful, modern web interface for the FileOrganizer C++ application. This provides an intuitive graphical frontend while leveraging your existing command-line tool.
 
-## ✨ Features
+## Features
 
 - **Modern UI**: Clean, responsive design that works on all devices
 - **Real-time Progress**: Visual progress indicators for all operations
@@ -13,7 +13,7 @@ A beautiful, modern web interface for the FileOrganizer C++ application. This pr
 - **Cross-Platform**: Works on Windows, macOS, and Linux
 - **No Dependencies**: Uses only Node.js built-in modules
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -47,7 +47,7 @@ A beautiful, modern web interface for the FileOrganizer C++ application. This pr
 
 3. **Open your browser** to `http://localhost:3000` (should open automatically)
 
-## 🖥️ Usage
+## Usage
 
 ### Basic Workflow
 
@@ -59,26 +59,26 @@ A beautiful, modern web interface for the FileOrganizer C++ application. This pr
 
 ### Interface Elements
 
-#### 📂 Folder Selection
+#### Folder Selection
 
 - **Manual Entry**: Type the full path to your folder
 - **Quick Access**: Click Downloads, Desktop, or Documents for instant selection
 - **Browse Button**: Future enhancement for file system navigation
 
-#### 🚀 Action Buttons
+#### Action Buttons
 
-- **👁️ Preview Files**: Shows what files will be moved where (safe, no changes made)
-- **📋 Organize Files**: Performs the actual organization (creates folders and moves files)
-- **📊 History**: Shows all past organization sessions for the selected folder
-- **↩️ Undo Last**: Reverses the most recent organization operation
+- **Preview Files**: Shows what files will be moved where (safe, no changes made)
+- **Organize Files**: Performs the actual organization (creates folders and moves files)
+- **History**: Shows all past organization sessions for the selected folder
+- **↩Undo Last**: Reverses the most recent organization operation
 
-#### 📋 Results Section
+#### Results Section
 
 - Displays output from the FileOrganizer executable
 - Shows detailed information about processed files
 - Includes error messages and status updates
 
-#### ⏳ Progress Tracking
+#### Progress Tracking
 
 - Real-time progress bar for long operations
 - Status updates during file processing
@@ -105,7 +105,7 @@ A beautiful, modern web interface for the FileOrganizer C++ application. This pr
 - `Ctrl+Z`: Undo last operation
 - `Escape`: Close modals
 
-## 🔧 Technical Details
+## Technical Details
 
 ### Architecture
 
@@ -148,7 +148,7 @@ web/
 └── README.md          # This file
 ```
 
-## 🌐 API Endpoints
+## API Endpoints
 
 The Node.js server provides these internal API endpoints:
 
@@ -159,7 +159,7 @@ The Node.js server provides these internal API endpoints:
 
 Each endpoint expects a JSON payload with `folderPath` and optional `sessionId`.
 
-## 🎨 Customization
+## Customization
 
 ### Styling
 
@@ -178,14 +178,14 @@ The interface uses CSS custom properties (variables) for easy theming:
 
 Edit the `setQuickFolder()` function in `app.js` to customize quick access folders for your system.
 
-## 🔒 Security Notes
+## Security Notes
 
 - **Local Only**: The server only accepts connections from localhost
 - **No File System Access**: Web interface cannot directly access your file system
 - **Process Isolation**: Each operation runs in a separate process
 - **Safe Operations**: All file operations go through the tested C++ executable
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -223,7 +223,7 @@ console.log("Debug: Args:", args);
 console.log("Debug: Output:", stdout);
 ```
 
-## 🚀 Future Enhancements
+## Future Enhancements
 
 Possible improvements for future versions:
 
@@ -235,11 +235,11 @@ Possible improvements for future versions:
 - **Settings Panel**: Customize organization behavior
 - **Dark Mode**: Toggle between light and dark themes
 
-## 📝 License
+## License
 
 This web interface is part of the FileOrganizer project and follows the same MIT License.
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -247,7 +247,7 @@ This web interface is part of the FileOrganizer project and follows the same MIT
 4. Test with the C++ executable
 5. Submit a pull request
 
-## 📞 Support
+## Support
 
 If you encounter issues:
 
@@ -258,4 +258,4 @@ If you encounter issues:
 
 ---
 
-**Happy Organizing! 📁✨**
+**Happy Organizing! ✨**

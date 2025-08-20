@@ -8,12 +8,12 @@ File Organizer scans a directory and automatically sorts files into predefined c
 
 ## Features
 
-- Automatic file categorization by extension
-- Safe file operations with error handling
-- Complete undo functionality with session tracking
-- Cross-platform compatibility (Windows, Linux, macOS)
-- Interactive and command-line modes
-- Progress tracking and detailed logging
+-   Automatic file categorization by extension
+-   Safe file operations with error handling
+-   Complete undo functionality with session tracking
+-   Cross-platform compatibility (Windows, Linux, macOS)
+-   Interactive and command-line modes
+-   Progress tracking and detailed logging
 
 ## Supported File Types
 
@@ -29,46 +29,53 @@ File Organizer scans a directory and automatically sorts files into predefined c
 
 ### Prerequisites
 
-- C++ compiler with C++17 support (g++, clang++, MSVC)
-- Windows, Linux, or macOS
+-   C++ compiler with C++17 support (g++, clang++, MSVC)
+-   Windows, Linux, or macOS
+
+#### Setting up C++ Development Environment
+
+If you need help setting up a C++ compiler and development environment:
+
+-   **Official VS Code C++ Documentation**: [https://code.visualstudio.com/docs/languages/cpp](https://code.visualstudio.com/docs/languages/cpp)
+-   **Video Tutorial**: [How to Install C++ Compiler and Run C++ Programs](https://www.youtube.com/watch?v=DMWD7wfhgNY)
 
 ### Installation
 
 1. Clone the repository:
 
-   ```bash
-   git clone https://github.com/oladosuabayomi/FileOrganizer.git
+    ```bash
+    git clone https://github.com/oladosuabayomi/FileOrganizer.git
 
-   ```
+    ```
 
-   After cloning, navigate to the project directory:
+    After cloning, navigate to the project directory:
 
-   ```bash
-   cd FileOrganizer
-   ```
+    ```bash
+    cd FileOrganizer
+    ```
 
 2. Build the project:
 
-   **Windows (Command Prompt):**
+    **Windows (Command Prompt):**
 
-   ```cmd
-   ./build.bat
-   ```
+    ```cmd
+    ./build.bat
+    ```
 
-   **Linux/macOS/Windows (Git Bash):**
+    **Linux/macOS/Windows (Git Bash):**
 
-   ```bash
-   chmod +x run.sh
-   ./run.sh
-   ```
+    ```bash
+    chmod +x run.sh
+    ./run.sh
+    ```
 
 3. The executable will be created in the `build/` directory:
-   - **Windows**: `build/FileOrganizer.exe`
-   - **Linux/macOS**: `build/FileOrganizer`
+    - **Windows**: `build/FileOrganizer.exe`
+    - **Linux/macOS**: `build/FileOrganizer`
 
 ## Usage
 
-### 🌐 Web Interface (Recommended)
+### Web Interface (Recommended)
 
 For the easiest experience, use the modern web interface:
 
@@ -87,15 +94,17 @@ cd web
 
 The web interface provides:
 
-- Beautiful, modern UI that works on all devices
-- Real-time progress tracking and visual feedback
-- File preview before organization
-- Organization history and selective undo
-- No command-line knowledge required
+-   Beautiful, modern UI that works on all devices
+-   Real-time progress tracking and visual feedback
+-   File preview before organization
+-   Organization history and selective undo
+-   No command-line knowledge required
 
 Visit `http://localhost:3000` after starting the server.
 
-### 💻 Command Line Interface
+**For detailed web interface documentation**, see [web/README.md](web/README.md)
+
+### Command Line Interface
 
 ### Basic Commands
 
@@ -191,8 +200,8 @@ FileOrganizer/
 
 Use the provided build scripts for your platform:
 
-- **Windows**: `build.bat`
-- **Linux/macOS/Git Bash**: `./run.sh`
+-   **Windows**: `build.bat`
+-   **Linux/macOS/Git Bash**: `./run.sh`
 
 ### Manual Compilation
 
