@@ -28,6 +28,7 @@
 #include <filesystem>
 #include <vector>
 #include <map>
+#include <set>
 #include <algorithm>
 #include <fstream>
 #include <ctime>
@@ -124,17 +125,21 @@ public:
         std::string sessionId = getCurrentTimestamp();
         std::cout << "Session ID: " << sessionId << std::endl;
         
-        // Create category folders
-        createCategoryFolders(folderPath);
-        
         std::vector<FileMove> moves;
         std::vector<fs::directory_entry> filesToProcess;
+        std::set<std::string> neededCategories;
         
-        // Single pass: collect all valid files
+        // First pass: collect all valid files and determine needed categories
         std::cout << "Scanning files..." << std::flush;
         for (const auto& entry : fs::directory_iterator(folderPath)) {
             if (entry.is_regular_file() && isValidFile(entry.path(), folderPath)) {
                 filesToProcess.push_back(entry);
+                
+                // Determine which category this file belongs to
+                std::string extension = entry.path().extension().string();
+                std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+                std::string category = getCategory(extension);
+                neededCategories.insert(category);
             }
         }
         
@@ -145,6 +150,10 @@ public:
         }
         
         std::cout << " Found " << totalFiles << " files to organize." << std::endl;
+        
+        // Create only the category folders that are actually needed
+        createCategoryFolders(folderPath, neededCategories);
+        
         std::cout << "Processing files:" << std::endl;
         
         int processedFiles = 0;
@@ -319,13 +328,10 @@ private:
         return category;
     }
     
-    void createCategoryFolders(const std::string& basePath) {
-        // Store created paths for faster lookup later
-        static std::vector<std::string> categoryFolders = {"Images", "Videos", "Music", "Documents", "Others"};
-        
-        // Create all category folders at once, avoiding string concatenation in loops
+    void createCategoryFolders(const std::string& basePath, const std::set<std::string>& neededCategories) {
+        // Only create folders for categories that actually have files
         fs::path basePathObj(basePath);
-        for (const auto& folder : categoryFolders) {
+        for (const auto& folder : neededCategories) {
             fs::path folderPath = basePathObj / folder;
             try {
                 if (!fs::exists(folderPath)) {
