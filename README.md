@@ -169,31 +169,6 @@ Visit `http://localhost:3000` after starting the server.
 ./build/FileOrganizer --undo ~/Downloads
 ```
 
-## Project Structure
-
-```text
-FileOrganizer/
-├── src/
-│   └── fileorganizer.cpp      # Main application source
-├── web/                       # Web interface files
-│   ├── index.html            # Web UI main page
-│   ├── styles.css            # Modern CSS styling
-│   ├── app.js               # Frontend JavaScript
-│   ├── server.js            # Node.js backend server
-│   ├── start.bat            # Windows web server launcher
-│   ├── start.sh             # Linux/macOS web server launcher
-│   └── README.md            # Web interface documentation
-├── build/                     # Build output directory
-│   └── FileOrganizer(.exe)   # Compiled executable
-├── build.bat                 # Windows build script
-├── run.sh                    # Linux/macOS build script
-├── launch-web.bat            # Easy web interface launcher (Windows)
-├── README.md                 # Main documentation (this file)
-├── DOCUMENTATION.md          # Technical documentation
-├── LICENSE                   # MIT License
-└── .gitignore               # Git ignore rules
-```
-
 ## Development
 
 ### Building from Source
